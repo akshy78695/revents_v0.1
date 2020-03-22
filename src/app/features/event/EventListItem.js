@@ -30,7 +30,7 @@ export class EventListItem extends Component {
                 </div>
                 <hr style={{ margin: "0" }} />
                 <div className="card-body">
-                    {date} | {venue}
+                    <i className="far fa-clock"></i>{" "}{date} | <i className="fas fa-map-marker-alt"></i>{" "} {venue}
                 </div>
                 <hr style={{ margin: "0" }} />
                 <div

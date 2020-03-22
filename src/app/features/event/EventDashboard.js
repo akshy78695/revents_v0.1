@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import EventList from "./EventList";
 import EventForm from "./EventForm";
+import {v1 as uuid} from "uuid";
 
 const events = [
     {
@@ -103,30 +104,51 @@ class EventDashboard extends Component {
             isOpen: false
         };
     }
-    onCreateEventClick = () => {
+    onCreateButtonClick = () => {
         this.setState({
             isOpen: !this.state.isOpen
         });
-    }
+    };
+
+    onCreateNewEvnetHandle = event => {
+        event.id = uuid();
+        event.hostPhotoURL = './assets/user.png'
+        event.description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin ligula eu leo tincidunt"
+        event.attendees = []
+        this.setState(({events}) =>({
+            events: [event, ...events],
+            isOpen: false
+        }));
+    };
     render() {
         let { events, isOpen } = this.state;
         return (
             <React.Fragment>
                 <div className="d-md-none d-sm-block d-xs-block d-lg-none">
-                    <button className="btn-info btn ml-4 mb-4"  onClick={this.onCreateEventClick}>
+                    <button
+                        className="btn-info btn ml-4 mb-4"
+                        onClick={this.onCreateButtonClick}
+                    >
                         Create Event
                     </button>
-                    {isOpen && <EventForm cancelForm={this.onCreateEventClick}/>}
+                    {isOpen && (
+                        <EventForm newEvent={this.onCreateNewEvnetHandle} cancelForm={this.onCreateButtonClick} />
+                    )}
                 </div>
                 <div className="row">
                     <div className="col-md-7">
                         <EventList events={events} />
                     </div>
                     <div className="col-md-5 d-none d-md-block d-lg-block d-sm-none d-xs-none">
-                        <button className="btn-info btn ml-4 mb-4" onClick={this.onCreateEventClick}>
+                        <button
+                            className="btn-info btn ml-4 mb-4"
+                            onClick={this.onCreateButtonClick}
+                        >
                             Create Event
                         </button>
-                        {isOpen && <EventForm cancelForm={this.onCreateEventClick} />}
+                        {isOpen && (
+                            <EventForm newEvent={this.onCreateNewEvnetHandle} cancelForm={this.onCreateButtonClick} />
+                        )}
                     </div>
                 </div>
             </React.Fragment>

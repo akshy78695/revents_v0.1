@@ -10,12 +10,12 @@ class Navbar extends Component {
                             src="./assets/logo.png"
                             width="30"
                             height="30"
-                            class="d-inline-block align-top"
+                            className="d-inline-block align-top"
                             alt=""
                         />
                     </div>
                     <a
-                        class="navbar-brand font-weight-bold text-white"
+                        className="navbar-brand font-weight-bold text-white"
                         href="#!"
                     >
                         Re-vents
