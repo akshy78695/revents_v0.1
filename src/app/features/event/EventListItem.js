@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 
 export class EventListItem extends Component {
+    scrollTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
+    };
     render() {
         let {
             title,
@@ -11,6 +18,7 @@ export class EventListItem extends Component {
             attendees,
             description
         } = this.props.event;
+        let { selectEvent, deleteEvent } = this.props;
         return (
             <div className="card border shadow-lg rounded-lg mb-3">
                 <div className="card-body row">
@@ -30,7 +38,8 @@ export class EventListItem extends Component {
                 </div>
                 <hr style={{ margin: "0" }} />
                 <div className="card-body">
-                    <i className="far fa-clock"></i>{" "}{date} | <i className="fas fa-map-marker-alt"></i>{" "} {venue}
+                    <i className="far fa-clock"></i> {date} |{" "}
+                    <i className="fas fa-map-marker-alt"></i> {venue}
                 </div>
                 <hr style={{ margin: "0" }} />
                 <div
@@ -49,8 +58,24 @@ export class EventListItem extends Component {
                 </div>
                 <hr style={{ margin: "0" }} />
                 <div className="card-body row">{description}</div>
-                <div>
-                    <button className="btn btn-info float-right mr-4 mb-3">View</button>
+                <div className="ml-auto mb-4 mr-4">
+                    <button
+                        className="btn btn-info mr-3"
+                        onClick={() => {
+                            selectEvent(this.props.event);
+                            this.scrollTop();
+                        }}
+                    >
+                        View
+                    </button>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                            deleteEvent(this.props.event.id);
+                        }}
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         );

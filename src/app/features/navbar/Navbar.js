@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import "../../../App.css"
 
 class Navbar extends Component {
     render() {
         return (
-            <nav className="navbar navbar-expand-md navbar-light bg-dark" style={{backgroundImage:`linear-gradient(to right, #99ff99, #4d79ff)`}}>
+            <nav className="navbar navbar-expand-md navbar-light bg-dark" >
                 <div className="container">
                     <div className="navbar-brand">
                         <img
