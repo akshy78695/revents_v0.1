@@ -3,6 +3,7 @@ import EventList from "./EventList";
 import EventForm from "./EventForm";
 import { v1 as uuid } from "uuid";
 
+// Users Array
 const events = [
     {
         id: "1",

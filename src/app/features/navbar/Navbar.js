@@ -1,10 +1,27 @@
 import React, { Component } from "react";
-import "../../../App.css"
+import "../../../App.css";
+import { NavLink, withRouter } from "react-router-dom";
+import SignedOutMenu from "./menu's/SignedOutMenu";
+import SignedInMenu from "./menu's/SignedInMenu";
 
 class Navbar extends Component {
+    state = {
+        UserAuthentication: true
+    };
+    handleSignIn = () => {
+        this.setState({
+            UserAuthentication: true
+        });
+    };
+    handleSignOut = () => {
+        this.setState({
+            UserAuthentication: false
+        });
+        this.props.history.push("/");
+    };
     render() {
         return (
-            <nav className="navbar navbar-expand-md navbar-light bg-dark" >
+            <nav className=" navbar navbar-expand-md navbar-light bg-dark">
                 <div className="container">
                     <div className="navbar-brand">
                         <img
@@ -15,48 +32,54 @@ class Navbar extends Component {
                             alt=""
                         />
                     </div>
-                    <a
+                    <NavLink
+                        to="/"
+                        exact
                         className="navbar-brand font-weight-bold text-white"
-                        href="#!"
                     >
                         Re-vents
-                    </a>
+                    </NavLink>
                     <button
                         className="navbar-toggler"
                         data-toggle="collapse"
-                        aria-controls="navbarSupportedContent"
+                        aria-controls="ul"
                         aria-expanded="false"
                         data-target="#ul"
+                        style={{ outline: "none" }}
                     >
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="ul">
                         <ul className="navbar-nav">
                             <li className="nav-item active">
-                                <a href="#!" className="nav-link ml-3 text-white">
+                                <NavLink
+                                    to="/events"
+                                    className="nav-link ml-3 text-white "
+                                >
                                     Events
-                                </a>
+                                </NavLink>
                             </li>
                             <li className="nav-item">
-                                <a
-                                    href="#!"
+                                <NavLink
+                                    to="/peoples"
                                     className="nav-link ml-3 text-white"
                                 >
                                     People
-                                </a>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item createButtonMargin" >
+                                <NavLink to="/create" className="nav-link ml-3 text-white">
+                                    {/* <button className="btn btn-outline-primary px-3 text-success nav-link">
+                                    </button> */}
+                                        Create Event
+                                </NavLink>
                             </li>
                         </ul>
-                        <div
-                            className="ml-auto"
-                            style={{ fontFamily: "serif" }}
-                        >
-                            <button className="font-weight-bold btn btn-outline-light">
-                                Sign In
-                            </button>
-                            <button className="font-weight-bold btn btn-outline-light mx-3">
-                                Sign Up
-                            </button>
-                        </div>
+                        {this.state.UserAuthentication ? (
+                            <SignedInMenu onSignedOut={this.handleSignOut}/>
+                        ) : (
+                            <SignedOutMenu onSignedIn={this.handleSignIn}/>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -64,4 +87,4 @@ class Navbar extends Component {
     }
 }
 
-export default Navbar;
+export default withRouter(Navbar);
