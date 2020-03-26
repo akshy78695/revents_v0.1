@@ -7,6 +7,7 @@ import HomePage from "./app/features/Home/HomePage";
 import EventForm from "./app/features/event/EventForm";
 import PeoplesDashboard from "./app/features/user/PeoplesDashboard/PeoplesDashboard";
 import SettingsDashboard from "./app/features/user/Settings/SettingsDashboard";
+import TestComponent from "./app/features/test/TestComponent";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                                 />
                                 <Route path="/create" component={EventForm} />
                                 <Route path="/settings" component={SettingsDashboard} />
+                                <Route path="/test" component={TestComponent} />
                             </Container>
                         </React.Fragment>
                     )}

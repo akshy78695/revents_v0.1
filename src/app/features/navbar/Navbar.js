@@ -67,18 +67,29 @@ class Navbar extends Component {
                                     People
                                 </NavLink>
                             </li>
-                            <li className="nav-item createButtonMargin" >
-                                <NavLink to="/create" className="nav-link ml-3 text-white">
+                            <li className="nav-item">
+                                <NavLink
+                                    to="/test"
+                                    className="nav-link ml-3 text-white"
+                                >
+                                    test
+                                </NavLink>
+                            </li>
+                            <li className="nav-item createButtonMargin">
+                                <NavLink
+                                    to="/create"
+                                    className="nav-link ml-3 text-white"
+                                >
                                     {/* <button className="btn btn-outline-primary px-3 text-success nav-link">
                                     </button> */}
-                                        Create Event
+                                    Create Event
                                 </NavLink>
                             </li>
                         </ul>
                         {this.state.UserAuthentication ? (
-                            <SignedInMenu onSignedOut={this.handleSignOut}/>
+                            <SignedInMenu onSignedOut={this.handleSignOut} />
                         ) : (
-                            <SignedOutMenu onSignedIn={this.handleSignIn}/>
+                            <SignedOutMenu onSignedIn={this.handleSignIn} />
                         )}
                     </div>
                 </div>
