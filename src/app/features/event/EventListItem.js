@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 export class EventListItem extends Component {
     scrollTop = () => {
@@ -10,6 +11,7 @@ export class EventListItem extends Component {
     };
     render() {
         let {
+            id,
             title,
             hostedBy,
             hostPhotoURL,
@@ -18,7 +20,7 @@ export class EventListItem extends Component {
             attendees,
             description
         } = this.props.event;
-        let { selectEvent, deleteEvent } = this.props;
+        let {  deleteEvent } = this.props;
         return (
             <div className="card border shadow-lg rounded-lg mb-3">
                 <div className="card-body row">
@@ -59,15 +61,15 @@ export class EventListItem extends Component {
                 <hr style={{ margin: "0" }} />
                 <div className="card-body row">{description}</div>
                 <div className="ml-auto mb-4 mr-4">
-                    <button
+                    <Link
+                        to={`/event/${id}`}
                         className="btn btn-info mr-3"
                         onClick={() => {
-                            selectEvent(this.props.event);
                             this.scrollTop();
                         }}
                     >
                         View
-                    </button>
+                    </Link>
                     <button
                         className="btn btn-danger"
                         onClick={() => {

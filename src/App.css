@@ -2,15 +2,14 @@
     background-image: linear-gradient(to right, #99ff99, #4d79ff);
 }
 .center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
-@media only screen and (max-width : 768px){
-  .createButtonMargin{
-    margin-bottom: 30px;
-    width: 100%;
-  }
-  
+@media only screen and (max-width: 768px) {
+    .createButtonMargin {
+        margin-bottom: 30px;
+        width: 100%;
+    }
 }

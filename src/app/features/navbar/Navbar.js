@@ -6,7 +6,7 @@ import SignedInMenu from "./menu's/SignedInMenu";
 
 class Navbar extends Component {
     state = {
-        UserAuthentication: true
+        UserAuthentication: false
     };
     handleSignIn = () => {
         this.setState({
