@@ -18,7 +18,6 @@ const mapState = (state, ownProps) => {
 const EventDetailedPage = ({ event }) => {
     return (
         <div>
-            {console.log(event)}
             {(event !== undefined) ?
             <div className="row">
                 <div className="col-md-8">

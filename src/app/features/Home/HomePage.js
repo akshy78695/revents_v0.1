@@ -22,7 +22,7 @@ const HomePage = ({history}) => {
                     </div>
                     <div className="text-center mt-4" style={{ width: "100%" }}>
                         <button onClick={() => history.push("/events")} className="btn btn-outline-light btn-lg">
-                            GEt Started <i className="fas fa-arrow-circle-right"></i>
+                            Get Started <i className="fas fa-arrow-circle-right"></i>
                         </button>
                     </div>
                 </div>

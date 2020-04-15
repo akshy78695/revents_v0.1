@@ -20,7 +20,7 @@ const EventDetailedChat = () => {
                     className="form-control"
                     id=""
                     cols="30"
-                    rows="7"
+                    rows="4"
                 ></textarea>
                 <button className="btn btn-primary mt-3">
                     <i className="fas fa-edit"></i>

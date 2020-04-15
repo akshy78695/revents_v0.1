@@ -6,7 +6,7 @@ export class EventListItem extends Component {
         window.scrollTo({
             top: 0,
             left: 0,
-            behavior: "smooth"
+            behavior: "smooth",
         });
     };
     render() {
@@ -18,9 +18,9 @@ export class EventListItem extends Component {
             date,
             venue,
             attendees,
-            description
+            description,
         } = this.props.event;
-        let {  deleteEvent } = this.props;
+        let { deleteEvent } = this.props;
         return (
             <div className="card border shadow-lg rounded-lg mb-3">
                 <div className="card-body row">
@@ -48,7 +48,7 @@ export class EventListItem extends Component {
                     className="card-body border-left border-right"
                     style={{ backgroundColor: "#e6e6e6" }}
                 >
-                    {attendees.map(attendee => (
+                    {attendees.map((attendee) => (
                         <img
                             key={attendee.id}
                             style={{ borderRadius: "62px" }}
@@ -65,7 +65,18 @@ export class EventListItem extends Component {
                         to={`/event/${id}`}
                         className="btn btn-info mr-3"
                         onClick={() => {
-                            this.scrollTop();
+                            try {
+                                window.scroll({
+                                    behavior: "smooth",
+                                    top: 0,
+                                });
+                            } catch (err) {
+                                if (err instanceof TypeError) {
+                                    window.scroll(0, 0);
+                                } else {
+                                    throw err;
+                                }
+                            }
                         }}
                     >
                         View
