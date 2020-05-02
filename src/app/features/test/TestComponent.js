@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { incrementCounter, decrementCounter } from "./TestActions";
+import TestPlaceInput from "./TestPlaceInput";
+import SimpleMap from "./SimpleMap";
 
-const mapState = state => ({
-    data: state.test.data
+const mapState = (state) => ({
+    data: state.test.data,
 });
 const actions = {
     incrementCounter,
-    decrementCounter
+    decrementCounter,
 };
 export class TestComponent extends Component {
     render() {
@@ -15,27 +17,6 @@ export class TestComponent extends Component {
         return (
             <div>
                 <h1>TestComponent</h1>
-                <div className="">
-                    <svg
-                        class="bi bi-clock"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M8 15A7 7 0 108 1a7 7 0 000 14zm8-7A8 8 0 110 8a8 8 0 0116 0z"
-                            clip-rule="evenodd"
-                        />
-                        <path
-                            fill-rule="evenodd"
-                            d="M7.5 3a.5.5 0 01.5.5v5.21l3.248 1.856a.5.5 0 01-.496.868l-3.5-2A.5.5 0 017 9V3.5a.5.5 0 01.5-.5z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                </div>
                 <h1>{data}</h1>
                 <button onClick={incrementCounter} className="btn btn-primary">
                     INCREASE
@@ -43,6 +24,14 @@ export class TestComponent extends Component {
                 <button onClick={decrementCounter} className="btn btn-danger">
                     DECREASE
                 </button>
+                <br />
+                <br />
+                <br />
+                <TestPlaceInput />
+                <br />
+                <br />
+                <br />
+                <SimpleMap/>
             </div>
         );
     }

@@ -26,7 +26,7 @@ const EventDetailedPage = ({ event }) => {
                     <EventDetailedChat />
                 </div>
                 <div className="col-md-4">
-                    <EventDetailedSidebar attendees={event.attendees} />
+                    <EventDetailedSidebar attendees={event.attendees} hostName={event.hostedBy} />
                 </div>
             </div>
             : <div className="text-center h1">Sorry! Event Not FOund</div> 

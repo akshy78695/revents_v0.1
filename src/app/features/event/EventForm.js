@@ -1,3 +1,4 @@
+// FORMSY is react library like redux form
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
@@ -14,6 +15,18 @@ import InputTextarea from "../../common/form/InputTextarea";
 import SelectInput from "../../common/form/SelectInput";
 import InputDate from "../../common/form/InputDate";
 import moment from "moment";
+import PlaceInput from "../../common/form/PlaceInput";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+
+/*  
+    http://api.openweathermap.org/data/2.5/weather?zip=401105,in&appid=d610bde57032cdc064598ffec1ea9f27
+
+    http://api.openweathermap.org/data/2.5/weather?q=mumbai&appid=d610bde57032cdc064598ffec1ea9f27
+*/
+
+/* 
+// global google 
+*/
 
 const mapState = (state, ownProps) => {
     let eventId = ownProps.match.params.id;
@@ -51,10 +64,38 @@ const validate = combineValidators({
     date: isRequired({ message: "Date is requrired" }),
 });
 export class EventForm extends Component {
-    onSubmit = (values) => {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            cityLatLng: {},
+            venueLatLng: {},
+        };
+    }
+
+    onSubmit = async (values) => {
         // warning for moment :Deprecation warning: value provided is not in a recognized RFC2822 or ISO
         //format. moment construction falls back to js Date(), which is not reliable across all browsers and
         //versions.
+        // values.venueLatLng = this.state.venueLatLng;
+        let onlyVenue = values.venue;
+        onlyVenue = onlyVenue.substring(0, onlyVenue.indexOf(","));
+        await fetch(
+            `http://api.openweathermap.org/data/2.5/weather?q=${onlyVenue}&appid=d610bde57032cdc064598ffec1ea9f27`
+        )
+            .then((result) => {
+                if (result.status === 400 || result.status === 404) {
+                    return Promise.reject("venue address not found on map");
+                }
+                return result.json();
+            })
+            .then((data) => {
+                values.venueLatLng = {
+                    lat: data.coord.lat,
+                    lng: data.coord.lon,
+                };
+            })
+            .catch((e) => console.log(e));
         let time = moment(values.date).format("LLL");
         values.date = time;
         if (this.props.initialValues.id) {
@@ -88,7 +129,7 @@ export class EventForm extends Component {
                 ],
             };
             this.props.createEvent(newEvent);
-            this.props.history.push("/events");
+            this.props.history.push(`/event/${newEvent.id}`);
         }
     };
     render() {
@@ -130,13 +171,13 @@ export class EventForm extends Component {
                             </label>
                             <Field
                                 name="city"
-                                component={InputText}
+                                component={PlaceInput}
                                 className="form-control mt-2"
                                 placeholder="In Which CIty?"
                             />
                             <Field
                                 name="venue"
-                                component={InputText}
+                                component={PlaceInput}
                                 className="form-control mt-2"
                                 placeholder="Venue?"
                             />

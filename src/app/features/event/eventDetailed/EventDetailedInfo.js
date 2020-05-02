@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import EventDetailedMap from "./EventDetailedMap";
 
 const EventDetailedInfo = ({ event }) => {
-    let { description, date, venue } = event;
+    const [isMapOpen, setToggleMap] = useState(false);
+    let { description, date, venue, venueLatLng } = event;
+
     return (
         <div>
             <div className="card my-4">
@@ -50,27 +53,49 @@ const EventDetailedInfo = ({ event }) => {
                     </span>
                     <span className="h5 ml-3 align-middle">{date}</span>
                 </div>
-                <div className="card-body border-top py-3">
-                    <span>
-                        <svg
-                            className="bi bi-map"
-                            width="1.5em"
-                            height="1.5em"
-                            viewBox="0 0 16 16"
-                            fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg"
+                <div className="card-body border-top p-0">
+                    <div className="p-3">
+                        <span>
+                            <svg
+                                className="bi bi-map"
+                                width="1.5em"
+                                height="1.5em"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    d="M15.817.613A.5.5 0 0116 1v13a.5.5 0 01-.402.49l-5 1a.502.502 0 01-.196 0L5.5 14.51l-4.902.98A.5.5 0 010 15V2a.5.5 0 01.402-.49l5-1a.5.5 0 01.196 0l4.902.98 4.902-.98a.5.5 0 01.415.103zM10 2.41l-4-.8v11.98l4 .8V2.41zm1 11.98l4-.8V1.61l-4 .8v11.98zm-6-.8V1.61l-4 .8v11.98l4-.8z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+                        </span>
+                        <span className="h5 ml-3 align-middle">{venue}</span>
+                        <button
+                            className="btn btn-info btn-sm float-right align-middle"
+                            onClick={() => setToggleMap(!isMapOpen)}
                         >
-                            <path
-                                fillRule="evenodd"
-                                d="M15.817.613A.5.5 0 0116 1v13a.5.5 0 01-.402.49l-5 1a.502.502 0 01-.196 0L5.5 14.51l-4.902.98A.5.5 0 010 15V2a.5.5 0 01.402-.49l5-1a.5.5 0 01.196 0l4.902.98 4.902-.98a.5.5 0 01.415.103zM10 2.41l-4-.8v11.98l4 .8V2.41zm1 11.98l4-.8V1.61l-4 .8v11.98zm-6-.8V1.61l-4 .8v11.98l4-.8z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
-                    </span>
-                    <span className="h5 ml-3 align-middle">{venue}</span>
-                    <button className="btn btn-info btn-sm float-right align-middle">
-                        Show map
-                    </button>
+                            {isMapOpen ? (
+                                <span>Close Map</span>
+                            ) : (
+                                <span>Show Map</span>
+                            )}
+                        </button>
+                        <br />
+                        <br />
+                        {!venueLatLng && (
+                            <span className="float-right text-danger">
+                                Sorry! map not available
+                            </span>
+                        )}
+                    </div>
+                    {isMapOpen && (
+                        <EventDetailedMap
+                            lat={venueLatLng ? venueLatLng.lat : 90.0}
+                            lng={venueLatLng ? venueLatLng.lng : 45.0}
+                        />
+                    )}
                 </div>
             </div>
         </div>
