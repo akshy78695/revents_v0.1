@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { incrementCounter, decrementCounter } from "./TestActions";
 import TestPlaceInput from "./TestPlaceInput";
-import SimpleMap from "./SimpleMap";
+import { openModal } from "../modals/ModalActions";
 
 const mapState = (state) => ({
     data: state.test.data,
@@ -10,10 +10,16 @@ const mapState = (state) => ({
 const actions = {
     incrementCounter,
     decrementCounter,
+    openModal,
 };
 export class TestComponent extends Component {
     render() {
-        const { data, incrementCounter, decrementCounter } = this.props;
+        const {
+            data,
+            incrementCounter,
+            decrementCounter,
+            openModal,
+        } = this.props;
         return (
             <div>
                 <h1>TestComponent</h1>
@@ -24,6 +30,12 @@ export class TestComponent extends Component {
                 <button onClick={decrementCounter} className="btn btn-danger">
                     DECREASE
                 </button>
+                <button
+                    onClick={() => openModal("TestModal", { data: 23 })}
+                    className="btn btn-info"
+                >
+                    OPen modal
+                </button>
                 <br />
                 <br />
                 <br />
@@ -31,7 +43,6 @@ export class TestComponent extends Component {
                 <br />
                 <br />
                 <br />
-                <SimpleMap/>
             </div>
         );
     }

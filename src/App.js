@@ -9,12 +9,14 @@ import PeoplesDashboard from "./app/features/user/PeoplesDashboard/PeoplesDashbo
 import SettingsDashboard from "./app/features/user/Settings/SettingsDashboard";
 import TestComponent from "./app/features/test/TestComponent";
 import EventDetailedPage from "./app/features/event/eventDetailed/EventDetailedPage";
+import ModalManager from "./app/features/modals/ModalManager";
 
 class App extends Component {
     // console.log(this.props)
     render() {
         return (
             <React.Fragment>
+                <ModalManager />
                 <Route exact path="/" component={HomePage} />
                 <Route
                     path="/(.+)"

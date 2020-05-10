@@ -2,7 +2,7 @@ import React from "react";
 import "../../../../App.css";
 import { NavLink } from "react-router-dom";
 
-const SignedInMenu = ({ onSignedOut }) => {
+const SignedInMenu = ({ onSignedOut, currentUser }) => {
     return (
         <div className="ml-auto mobileMargin nav-item dropdown">
             <a
@@ -20,7 +20,7 @@ const SignedInMenu = ({ onSignedOut }) => {
                     style={{ borderRadius: "50px", width: "40px" }}
                     alt=""
                 />{" "}
-                <span className="align-middle"></span> Username
+                <span className="align-middle"></span> {currentUser}
             </a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="#!">
@@ -39,7 +39,11 @@ const SignedInMenu = ({ onSignedOut }) => {
                     <i className="fas fa-user"></i>
                     &emsp;My profile
                 </a>
-                <NavLink to="/settings" style={{padding:".25rem 1.5rem"}} className="dropdown-item text-dark">
+                <NavLink
+                    to="/settings"
+                    style={{ padding: ".25rem 1.5rem" }}
+                    className="dropdown-item text-dark"
+                >
                     <i className="fas fa-cogs"></i>&ensp;&nbsp;Settings
                 </NavLink>
                 {/* <NavLink to="/settings">

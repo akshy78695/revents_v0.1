@@ -3,23 +3,32 @@ import "../../../App.css";
 import { NavLink, withRouter } from "react-router-dom";
 import SignedOutMenu from "./menu's/SignedOutMenu";
 import SignedInMenu from "./menu's/SignedInMenu";
+import { connect } from "react-redux";
+import { openModal } from "../modals/ModalActions";
+import { logout } from "../auth/authActions";
 
+const actions = {
+    openModal,
+    logout,
+};
+
+const mapState = (state) => ({
+    auth: state.auth,
+});
 class Navbar extends Component {
-    state = {
-        UserAuthentication: false
-    };
     handleSignIn = () => {
-        this.setState({
-            UserAuthentication: true
-        });
+        this.props.openModal("LoginModal");
+    };
+    handleRegister = () => {
+        this.props.openModal("RegisterModal");
     };
     handleSignOut = () => {
-        this.setState({
-            UserAuthentication: false
-        });
+        this.props.logout();
         this.props.history.push("/");
     };
     render() {
+        const { auth } = this.props;
+        const UserAuthenticated = auth.authenticated;
         return (
             <nav className=" navbar navbar-expand-md navbar-light bg-dark">
                 <div className="container">
@@ -86,10 +95,16 @@ class Navbar extends Component {
                                 </NavLink>
                             </li>
                         </ul>
-                        {this.state.UserAuthentication ? (
-                            <SignedInMenu onSignedOut={this.handleSignOut} />
+                        {UserAuthenticated ? (
+                            <SignedInMenu
+                                currentUser={auth.currentUser}
+                                onSignedOut={this.handleSignOut}
+                            />
                         ) : (
-                            <SignedOutMenu onSignedIn={this.handleSignIn} />
+                            <SignedOutMenu
+                                onSignedIn={this.handleSignIn}
+                                register={this.handleRegister}
+                            />
                         )}
                     </div>
                 </div>
@@ -98,4 +113,4 @@ class Navbar extends Component {
     }
 }
 
-export default withRouter(Navbar);
+export default withRouter(connect(mapState, actions)(Navbar));

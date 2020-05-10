@@ -16,7 +16,6 @@ import SelectInput from "../../common/form/SelectInput";
 import InputDate from "../../common/form/InputDate";
 import moment from "moment";
 import PlaceInput from "../../common/form/PlaceInput";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 /*  
     http://api.openweathermap.org/data/2.5/weather?zip=401105,in&appid=d610bde57032cdc064598ffec1ea9f27

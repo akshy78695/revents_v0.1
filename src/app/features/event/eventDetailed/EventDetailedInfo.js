@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import EventDetailedMap from "./EventDetailedMap";
 
+
+// https://www.google.com/maps?q=19.120127999999998,72.8891392
+
+
 const EventDetailedInfo = ({ event }) => {
     const [isMapOpen, setToggleMap] = useState(false);
     let { description, date, venue, venueLatLng } = event;
