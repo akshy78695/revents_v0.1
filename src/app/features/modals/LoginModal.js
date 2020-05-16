@@ -12,9 +12,10 @@ class LoginModal extends Component {
             <Modal
                 size="mini"
                 open={true}
-                // dimmer={"blurring"}
+                dimmer={"blurring"}
                 onClose={this.props.closeModal}
                 style={{ height: "auto", top: "auto", left: "auto" }}
+                closeIcon
             >
                 <Modal.Header>Login to Re-vents</Modal.Header>
                 <Modal.Content>

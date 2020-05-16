@@ -6,9 +6,11 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import { ConfigureStore } from "./app/store/ConfigureStore";
 import { BrowserRouter } from "react-router-dom";
+import { loadEvent } from "./app/features/event/eventActions";
 
 const store = ConfigureStore();
 // console.log(store.getState());
+store.dispatch(loadEvent())
 
 ReactDOM.render(
     <Provider store={store}>

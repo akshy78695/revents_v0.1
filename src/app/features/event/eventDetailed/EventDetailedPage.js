@@ -4,6 +4,7 @@ import EventDetailedInfo from "./EventDetailedInfo";
 import EventDetailedChat from "./EventDetailedChat/EventDetailedChat";
 import EventDetailedSidebar from "./EventDetailedSidebar";
 import { connect } from "react-redux";
+import {withGetScreen} from "react-getscreen"
 
 const mapState = (state, ownProps) => {
     let eventId = ownProps.match.params.id;
@@ -15,12 +16,12 @@ const mapState = (state, ownProps) => {
     return { event };
 };
 
-const EventDetailedPage = ({ event }) => {
+const EventDetailedPage = ({ event, isMobile }) => {
     return (
         <div>
             {(event !== undefined) ?
             <div className="row">
-                <div className="col-md-8">
+                <div className={`col-md-8 ${isMobile() ? "p-0" : ""}`}>
                     <EventDetailedHeader event={event} />
                     <EventDetailedInfo event={event} />
                     <EventDetailedChat />
@@ -35,4 +36,4 @@ const EventDetailedPage = ({ event }) => {
     );
 };
 
-export default connect(mapState)(EventDetailedPage);
+export default connect(mapState)(withGetScreen(EventDetailedPage));

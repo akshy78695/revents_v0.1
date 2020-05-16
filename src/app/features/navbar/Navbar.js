@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import "../../../App.css";
 import { NavLink, withRouter } from "react-router-dom";
 import SignedOutMenu from "./menu's/SignedOutMenu";
@@ -68,32 +68,36 @@ class Navbar extends Component {
                                     Events
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink
-                                    to="/peoples"
-                                    className="nav-link ml-3 text-white"
-                                >
-                                    People
-                                </NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink
-                                    to="/test"
-                                    className="nav-link ml-3 text-white"
-                                >
-                                    test
-                                </NavLink>
-                            </li>
-                            <li className="nav-item createButtonMargin">
-                                <NavLink
-                                    to="/create"
-                                    className="nav-link ml-3 text-white"
-                                >
-                                    {/* <button className="btn btn-outline-primary px-3 text-success nav-link">
+                            {UserAuthenticated && (
+                                <Fragment>
+                                    <li className="nav-item">
+                                        <NavLink
+                                            to="/peoples"
+                                            className="nav-link ml-3 text-white"
+                                        >
+                                            People
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item">
+                                        <NavLink
+                                            to="/test"
+                                            className="nav-link ml-3 text-white"
+                                        >
+                                            test
+                                        </NavLink>
+                                    </li>
+                                    <li className="nav-item createButtonMargin">
+                                        <NavLink
+                                            to="/create"
+                                            className="nav-link ml-3 text-white"
+                                        >
+                                            {/* <button className="btn btn-outline-primary px-3 text-success nav-link">
                                     </button> */}
-                                    Create Event
-                                </NavLink>
-                            </li>
+                                            Create Event
+                                        </NavLink>
+                                    </li>
+                                </Fragment>
+                            )}
                         </ul>
                         {UserAuthenticated ? (
                             <SignedInMenu

@@ -26,3 +26,9 @@
     input {
     width: 100%;
 }
+
+/* 0 margin for container in sementic ui react */
+/* .ui.container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+} */

@@ -31,9 +31,9 @@ export class EventListItem extends Component {
                             alt=""
                         />
                     </div>
-                    <div className="col-md-7">
-                        <div className="h3">{title}</div>
-                        <div className="h6">
+                    <div className="col-md-7" >
+                        <div className="h3 pl-2">{title}</div>
+                        <div className="h6 pl-2">
                             Hosted by <a href="#!">{hostedBy}</a>
                         </div>
                     </div>
@@ -59,7 +59,9 @@ export class EventListItem extends Component {
                     ))}
                 </div>
                 <hr style={{ margin: "0" }} />
-                <div className="card-body row">{description}</div>
+                <div className="card-body row">
+                    <div className="col-md-12">{description}</div>
+                </div>
                 <div className="ml-auto mb-4 mr-4">
                     <Link
                         to={`/event/${id}`}

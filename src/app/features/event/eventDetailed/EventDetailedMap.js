@@ -20,7 +20,7 @@ const Marker = () => (
 );
 
 const EventDetailedMap = ({ lat, lng }) => {
-    const zoom = 14;
+    const zoom = 16 ;
     console.log(lat, lng)
     return (
         <div className="mt-1 p-0">

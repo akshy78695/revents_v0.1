@@ -10,6 +10,7 @@ import SettingsDashboard from "./app/features/user/Settings/SettingsDashboard";
 import TestComponent from "./app/features/test/TestComponent";
 import EventDetailedPage from "./app/features/event/eventDetailed/EventDetailedPage";
 import ModalManager from "./app/features/modals/ModalManager";
+// import "./App.css";
 
 class App extends Component {
     // console.log(this.props)
@@ -21,9 +22,11 @@ class App extends Component {
                 <Route
                     path="/(.+)"
                     render={() => (
-                        <React.Fragment>
+                        <div>
                             <Navbar />
-                            <Container className="main">
+                            <Container
+                                className={`main`}
+                            >
                                 <Switch key={this.props.location.key}>
                                     <Route
                                         path="/peoples"
@@ -51,7 +54,7 @@ class App extends Component {
                                     />
                                 </Switch>
                             </Container>
-                        </React.Fragment>
+                        </div>
                     )}
                 />
             </React.Fragment>
