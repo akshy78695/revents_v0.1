@@ -51,6 +51,7 @@ export class TestComponent extends Component {
                 >
                     DECREASE
                 </Button>
+
                 <button
                     onClick={() => openModal("TestModal", { data: 23 })}
                     className="btn btn-info"

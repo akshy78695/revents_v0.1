@@ -14,7 +14,6 @@ import InputText from "../../common/form/InputText";
 import InputTextarea from "../../common/form/InputTextarea";
 import SelectInput from "../../common/form/SelectInput";
 import InputDate from "../../common/form/InputDate";
-import moment from "moment";
 import PlaceInput from "../../common/form/PlaceInput";
 
 /*  
@@ -94,9 +93,13 @@ export class EventForm extends Component {
                     lng: data.coord.lon,
                 };
             })
-            .catch((e) => console.log(e));
-        let time = moment(values.date).format("LLL");
-        values.date = time;
+            .catch((e) => {
+                console.log(e);
+                console.log("error in getting lat and lng in creating event");
+                values.venueLatLng = undefined;
+            });
+        let time = new Date(values.date);
+        values.date = time.toISOString();
         if (this.props.initialValues.id) {
             this.props.updateEvent(values);
             this.props.history.push(`/event/${this.props.initialValues.id}`);

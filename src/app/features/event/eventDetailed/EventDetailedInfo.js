@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import EventDetailedMap from "./EventDetailedMap";
-
+import { parseISO, format } from "date-fns";
 
 // https://www.google.com/maps?q=19.120127999999998,72.8891392
-
 
 const EventDetailedInfo = ({ event }) => {
     const [isMapOpen, setToggleMap] = useState(false);
@@ -55,7 +54,9 @@ const EventDetailedInfo = ({ event }) => {
                             />
                         </svg>
                     </span>
-                    <span className="h5 ml-3 align-middle">{date}</span>
+                    <span className="h5 ml-3 align-middle">
+                        {date && format(parseISO(date), "EEEE do LLL yyyy")}
+                    </span>
                 </div>
                 <div className="card-body border-top p-0">
                     <div className="p-3">
@@ -88,7 +89,7 @@ const EventDetailedInfo = ({ event }) => {
                         </button>
                         <br />
                         <br />
-                        {!venueLatLng && (
+                        {venueLatLng === {} && (
                             <span className="float-right text-danger">
                                 Sorry! map not available
                             </span>
@@ -96,8 +97,8 @@ const EventDetailedInfo = ({ event }) => {
                     </div>
                     {isMapOpen && (
                         <EventDetailedMap
-                            lat={venueLatLng ? venueLatLng.lat : 90.0}
-                            lng={venueLatLng ? venueLatLng.lng : 45.0}
+                            lat={venueLatLng ? venueLatLng.lat : 19.295233}
+                            lng={venueLatLng ? venueLatLng.lng : 72.854393}
                         />
                     )}
                 </div>

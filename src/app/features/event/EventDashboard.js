@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { createEvent, updateEvent, deleteEvent } from "./eventActions";
 import { withGetScreen } from "react-getscreen";
 import LoadingComponent from "../../layout/LoadingComponent";
+import RecentActivity from "./eventActivity/RecentActivity";
 
 const mapState = (state) => ({
     events: state.events,
@@ -22,7 +23,7 @@ class EventDashboard extends Component {
     };
     render() {
         let { events, loading } = this.props;
-        if(loading) return <LoadingComponent/>
+        if (loading) return <LoadingComponent />;
         return (
             <React.Fragment>
                 <div className="row">
@@ -31,17 +32,15 @@ class EventDashboard extends Component {
                     >
                         {loading ? (
                             <LoadingComponent />
-                            ) : 
-                        (
+                        ) : (
                             <EventList
                                 events={events}
                                 deleteEvent={this.handleDeleteEvent}
                             />
-                        )
-                        }
+                        )}
                     </div>
                     <div className="col-md-5 d-none d-md-block d-lg-block d-sm-none d-xs-none">
-                        Activity feed
+                        <RecentActivity />
                     </div>
                 </div>
             </React.Fragment>
