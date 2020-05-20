@@ -6,8 +6,8 @@ export class EventList extends Component {
         let {events, selectEvent, deleteEvent} = this.props
         return (
             <React.Fragment>
-                {events.map(event => {
-                    return <EventListItem key={event.id} event={event} selectEvent={selectEvent} deleteEvent={deleteEvent}/>;
+                {events && events.map((event, i) => {
+                    return <EventListItem key={i} event={event} selectEvent={selectEvent} deleteEvent={deleteEvent}/>;
                 })}
             </React.Fragment>
         );

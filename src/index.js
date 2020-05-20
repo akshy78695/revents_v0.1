@@ -7,23 +7,22 @@ import * as serviceWorker from "./serviceWorker";
 import ReduxToastr from "react-redux-toastr";
 import { Provider } from "react-redux";
 import { ConfigureStore } from "./app/store/ConfigureStore";
+// const { ConfigureStore } = await import("./app/store/ConfigureStore");
 import { BrowserRouter } from "react-router-dom";
-import { loadEvent } from "./app/features/event/eventActions";
 
 const store = ConfigureStore();
 // console.log(store.getState());
-store.dispatch(loadEvent());
 
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
-        <ReduxToastr 
-            position="bottom-right"
-            transitionIn="fadeIn"
-            transitionOut="fadeOut"
-            progressBar
-            timeOut={2500}
-        />
+            <ReduxToastr
+                position="bottom-right"
+                transitionIn="fadeIn"
+                transitionOut="fadeOut"
+                progressBar
+                timeOut={2500}
+            />
             <App />
         </BrowserRouter>
     </Provider>,

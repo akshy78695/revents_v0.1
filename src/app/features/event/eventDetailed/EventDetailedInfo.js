@@ -80,6 +80,7 @@ const EventDetailedInfo = ({ event }) => {
                         <button
                             className="btn btn-info btn-sm float-right align-middle"
                             onClick={() => setToggleMap(!isMapOpen)}
+                            disabled={true}
                         >
                             {isMapOpen ? (
                                 <span>Close Map</span>

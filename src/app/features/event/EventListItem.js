@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { format, parseISO } from "date-fns/esm";
+import { format } from "date-fns/esm";
 
 export class EventListItem extends Component {
     scrollTop = () => {
@@ -42,8 +42,7 @@ export class EventListItem extends Component {
                 <hr style={{ margin: "0" }} />
                 <div className="card-body">
                     <i className="far fa-clock"></i>{" "}
-                    {format(parseISO(date), "EEEE do LLL")} at{" "}
-                    {format(parseISO(date), "h:mm a")} |
+                    {format(date.toDate(), "EEEE do LLL")} at {format(date.toDate(), "h:mm a")} |
                     <i className="fas fa-map-marker-alt"></i> {venue}
                 </div>
                 <hr style={{ margin: "0" }} />

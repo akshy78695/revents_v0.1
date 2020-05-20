@@ -5,9 +5,10 @@ import { createEvent, updateEvent, deleteEvent } from "./eventActions";
 import { withGetScreen } from "react-getscreen";
 import LoadingComponent from "../../layout/LoadingComponent";
 import RecentActivity from "./eventActivity/RecentActivity";
+import { firestoreConnect } from "react-redux-firebase";
 
 const mapState = (state) => ({
-    events: state.events,
+    events: state.firestore.ordered.events,
     loading: state.async.loading,
 });
 
@@ -29,6 +30,7 @@ class EventDashboard extends Component {
                 <div className="row">
                     <div
                         className={`col-md-7 ${this.props.isMobile() && "p-0"}`}
+                        // className={`col-md-7 }`}
                     >
                         {loading ? (
                             <LoadingComponent />
@@ -48,4 +50,7 @@ class EventDashboard extends Component {
     }
 }
 
-export default connect(mapState, actions)(withGetScreen(EventDashboard));
+export default connect(
+    mapState,
+    actions
+)(firestoreConnect([{ collection: "events" }])(withGetScreen(EventDashboard)));
