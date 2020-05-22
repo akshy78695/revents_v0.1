@@ -10,6 +10,7 @@ export const rrfConfig = {
     userProfile: "users",
     attachAuthIsReady: true,
     useFirestoreForProfile: true,
+    updateProfileOnLogin: false,
 };
 
 export const ConfigureStore = () => {
@@ -23,7 +24,7 @@ export const ConfigureStore = () => {
     const composedEnhancer = composeWithDevTools(
         applyMiddleware(...middlewares),
         reactReduxFirebase(firebase, rrfConfig),
-        reduxFirestore(firebase),
+        reduxFirestore(firebase)
     );
 
     const store = createStore(rootReducer, composedEnhancer);

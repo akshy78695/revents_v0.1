@@ -1,19 +1,19 @@
 import React, { Component, Fragment } from "react";
 import "../../../App.css";
+import { withFirebase } from "react-redux-firebase";
 import { NavLink, withRouter } from "react-router-dom";
 import SignedOutMenu from "./menu's/SignedOutMenu";
 import SignedInMenu from "./menu's/SignedInMenu";
 import { connect } from "react-redux";
 import { openModal } from "../modals/ModalActions";
-import { logout } from "../auth/authActions";
 
 const actions = {
     openModal,
-    logout,
 };
 
 const mapState = (state) => ({
-    auth: state.auth,
+    auth: state.firebase.auth,
+    profile: state.firebase.profile,
 });
 class Navbar extends Component {
     handleSignIn = () => {
@@ -23,12 +23,12 @@ class Navbar extends Component {
         this.props.openModal("RegisterModal");
     };
     handleSignOut = () => {
-        this.props.logout();
+        this.props.firebase.logout();
         this.props.history.push("/");
     };
     render() {
-        const { auth } = this.props;
-        const UserAuthenticated = auth.authenticated;
+        const { auth, profile } = this.props;
+        const UserAuthenticated = auth.isLoaded && !auth.isEmpty;
         return (
             <nav className=" navbar navbar-expand-md navbar-light bg-dark">
                 <div className="container">
@@ -60,7 +60,11 @@ class Navbar extends Component {
                     </button>
                     <div className="collapse navbar-collapse" id="ul">
                         <ul className="navbar-nav">
-                            <li className="nav-item active">
+                            <li
+                                className="nav-item active"
+                                data-toggle="collapse"
+                                data-target=".navbar-collapse.show"
+                            >
                                 <NavLink
                                     to="/events"
                                     className="nav-link ml-3 text-white "
@@ -70,7 +74,11 @@ class Navbar extends Component {
                             </li>
                             {UserAuthenticated && (
                                 <Fragment>
-                                    <li className="nav-item">
+                                    <li
+                                        className="nav-item"
+                                        data-toggle="collapse"
+                                        data-target=".navbar-collapse.show"
+                                    >
                                         <NavLink
                                             to="/peoples"
                                             className="nav-link ml-3 text-white"
@@ -78,7 +86,11 @@ class Navbar extends Component {
                                             People
                                         </NavLink>
                                     </li>
-                                    <li className="nav-item">
+                                    <li
+                                        className="nav-item"
+                                        data-toggle="collapse"
+                                        data-target=".navbar-collapse.show"
+                                    >
                                         <NavLink
                                             to="/test"
                                             className="nav-link ml-3 text-white"
@@ -86,7 +98,11 @@ class Navbar extends Component {
                                             test
                                         </NavLink>
                                     </li>
-                                    <li className="nav-item createButtonMargin">
+                                    <li
+                                        className="nav-item createButtonMargin"
+                                        data-toggle="collapse"
+                                        data-target=".navbar-collapse.show"
+                                    >
                                         <NavLink
                                             to="/create"
                                             className="nav-link ml-3 text-white"
@@ -101,7 +117,7 @@ class Navbar extends Component {
                         </ul>
                         {UserAuthenticated ? (
                             <SignedInMenu
-                                currentUser={auth.currentUser}
+                                profile={profile}
                                 onSignedOut={this.handleSignOut}
                             />
                         ) : (
@@ -117,4 +133,4 @@ class Navbar extends Component {
     }
 }
 
-export default withRouter(connect(mapState, actions)(Navbar));
+export default withRouter(withFirebase(connect(mapState, actions)(Navbar)));

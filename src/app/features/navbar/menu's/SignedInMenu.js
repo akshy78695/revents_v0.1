@@ -2,7 +2,7 @@ import React from "react";
 import "../../../../App.css";
 import { NavLink } from "react-router-dom";
 
-const SignedInMenu = ({ onSignedOut, currentUser }) => {
+const SignedInMenu = ({ onSignedOut, profile }) => {
     return (
         <div className="ml-auto mobileMargin nav-item dropdown">
             <a
@@ -15,12 +15,12 @@ const SignedInMenu = ({ onSignedOut, currentUser }) => {
                 aria-expanded="false"
             >
                 <img
-                    src="https://randomuser.me/api/portraits/thumb/women/31.jpg"
+                    src={profile.photoURL || "https://randomuser.me/api/portraits/thumb/lego/2.jpg"}
                     className="mr-3"
                     style={{ borderRadius: "50px", width: "40px" }}
                     alt=""
                 />{" "}
-                <span className="align-middle"></span> {currentUser}
+                <span className="align-middle"></span> {profile.displayName}
             </a>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a className="dropdown-item" href="#!">
