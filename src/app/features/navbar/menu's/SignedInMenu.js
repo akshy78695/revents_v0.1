@@ -15,7 +15,8 @@ const SignedInMenu = ({ onSignedOut, profile }) => {
                 aria-expanded="false"
             >
                 <img
-                    src={profile.photoURL || "https://randomuser.me/api/portraits/thumb/lego/2.jpg"}
+                    // src={profile.photoURL || "https://randomuser.me/api/portraits/thumb/lego/2.jpg"}
+                    src={profile.photoURL}
                     className="mr-3"
                     style={{ borderRadius: "50px", width: "40px" }}
                     alt=""

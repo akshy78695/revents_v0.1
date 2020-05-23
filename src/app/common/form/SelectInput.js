@@ -14,12 +14,34 @@ const SelectInput = ({
                 value={input.value || ""}
                 onChange={(data) => input.onChange(data)}
                 className={className}
+                data-live-search={true}
             >
                 <option value="">Select a category</option>
                 {options.map((option, e) => (
-                    <option key={e}>{option.text}</option>
+                    <option key={e} value={option.value}>{option.text}</option>
                 ))}
             </select>
+            {/* <Form.Field>
+                <Select
+                    value={input.value || ""}
+                    onChange={(e, data) => input.onChange(data)}
+                    placeholder={placeholder}
+                    options={options}
+                    multiple={true}
+                    className={className}
+                />
+            </Form.Field> */}
+{/*            
+            <Dropdown
+                value={input.value || []}
+                onChange={(e, data) => input.onChange(data)}
+                placeholder={placeholder}
+                fluid
+                multiple={multiple}
+                search
+                selection
+                options={options}
+            /> */}
         </>
     );
 };

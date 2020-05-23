@@ -158,6 +158,7 @@ export class EventForm extends Component {
                                 name="category"
                                 component={SelectInput}
                                 options={category}
+                                multiple={false}
                                 className="custom-select mt-2"
                                 placeholder="Event About?"
                             />

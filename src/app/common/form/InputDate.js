@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../../App.css";
 
 const InputDate = ({
-    input,
+    input: { value, onChange, onBlur },
     placeholder,
     className,
     width,
@@ -13,14 +13,27 @@ const InputDate = ({
 }) => {
     return (
         <div className="customDatePickerWidth">
+            {/* <div> */}
             <DatePicker
                 {...rest}
                 className={className}
                 style={{ width: "max-width" }}
                 placeholderText={placeholder}
-                selected={input.value ? new Date(input.value) : null}
-                onChange={input.onChange}
-                onBlur={input.onBlur}
+                // selected={
+                //     !input.value.seconds && typeof input.value !== "string"
+                //         ? new Date(input.value)
+                //         : null
+                // }
+                selected={
+                    value
+                        ? Object.prototype.toString.call(value) !==
+                          "[object Date]"
+                            ? value.toDate()
+                            : value
+                        : null
+                }
+                onChange={onChange}
+                onBlur={(e, val) => onBlur(val)}
                 onChangeRaw={(e) => e.preventDefault()}
             />
             {touched && error && (

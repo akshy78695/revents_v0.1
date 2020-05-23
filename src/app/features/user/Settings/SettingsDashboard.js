@@ -7,17 +7,25 @@ import PhotosPage from "./PhotosPage";
 import Account from "./Account";
 import { connect } from "react-redux";
 import { updatePassword } from "../../auth/authActions";
+import { updateProfile } from "../../user/userActions";
 const actions = {
     updatePassword,
+    updateProfile,
 };
 
 const mapState = (state) => ({
     providerId:
         state.firebase.auth.isLoaded &&
         state.firebase.auth.providerData[0].providerId,
+    user: state.firebase.profile,
 });
 
-const SettingsDashboard = ({ updatePassword, providerId }) => {
+const SettingsDashboard = ({
+    updatePassword,
+    providerId,
+    user,
+    updateProfile,
+}) => {
     return (
         <div>
             <div className="row">
@@ -33,9 +41,22 @@ const SettingsDashboard = ({ updatePassword, providerId }) => {
                         />
                         <Route
                             path="/settings/basic_settings"
-                            component={BasicPage}
+                            render={() => (
+                                <BasicPage
+                                    initialValues={user}
+                                    updateProfile={updateProfile}
+                                />
+                            )}
                         />
-                        <Route path="/settings/about" component={About} />
+                        <Route
+                            path="/settings/about"
+                            render={() => (
+                                <About
+                                    initialValues={user}
+                                    updateProfile={updateProfile}
+                                />
+                            )}
+                        />
                         <Route path="/settings/photos" component={PhotosPage} />
                         <Route
                             path="/settings/account"
