@@ -1,5 +1,5 @@
 import {
-    ASYNC_ACTION_START,
+    ASYNC_ACTION_START, 
     ASYNC_ACTION_FINISH,
     ASYNC_ACTION_ERROR,
 } from "./asyncConstants";
@@ -7,7 +7,7 @@ import {
 export const asyncActionStart = () => {
     return {
         type: ASYNC_ACTION_START,
-    };
+    }; 
 };
 
 export const asyncActionFinish = () => {

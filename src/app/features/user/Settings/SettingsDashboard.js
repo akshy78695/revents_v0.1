@@ -3,7 +3,7 @@ import SettingNavbar from "./SettingNavbar";
 import { Switch, Route, Redirect } from "react-router-dom";
 import BasicPage from "./BasicPage";
 import About from "./About";
-import PhotosPage from "./PhotosPage";
+import PhotosPage from "./photos/PhotosPage";
 import Account from "./Account";
 import { connect } from "react-redux";
 import { updatePassword } from "../../auth/authActions";

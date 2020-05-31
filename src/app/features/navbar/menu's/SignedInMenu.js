@@ -16,7 +16,7 @@ const SignedInMenu = ({ onSignedOut, profile }) => {
             >
                 <img
                     // src={profile.photoURL || "https://randomuser.me/api/portraits/thumb/lego/2.jpg"}
-                    src={profile.photoURL}
+                    src={profile.photoURL || "/assets/user.png"}
                     className="mr-3"
                     style={{ borderRadius: "50px", width: "40px" }}
                     alt=""
