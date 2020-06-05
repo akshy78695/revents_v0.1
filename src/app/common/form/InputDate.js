@@ -9,13 +9,13 @@ const InputDate = ({
     className,
     width,
     meta: { touched, error },
-    // ...rest
+    ...rest
 }) => {
     return (
         <div className="customDatePickerWidth">
             {/* <div> */}
             <DatePicker
-                // {...rest}
+                {...rest}
                 className={className}
                 style={{ width: "max-width" }}
                 placeholderText={placeholder}

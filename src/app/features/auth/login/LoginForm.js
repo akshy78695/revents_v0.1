@@ -18,7 +18,7 @@ const LoginForm = ({ login, handleSubmit, error, socialLogin }) => {
                 <Field
                     name="email"
                     component={InputText}
-                    type="text"
+                    type="email"
                     placeholder="Email Address"
                     className="mt-2"
                 />

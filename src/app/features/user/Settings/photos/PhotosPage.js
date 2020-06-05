@@ -52,7 +52,6 @@ const PhotosPage = ({
 }) => {
     const [files, setFiles] = useState([]);
     const [image, setImage] = useState(null);
-    const [uploadButton, setUploadButton] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -62,11 +61,9 @@ const PhotosPage = ({
 
     const handleUploadImage = async () => {
         try {
-            setUploadButton(true);
             let temp = await uploadProfileImage(image, files[0].name);
             console.log(temp);
             // if(temp === "success"|| temp === "error"){setUploadButton(false)}
-            setUploadButton(false);
             console.log("uske niche");
             handleCancelCrop();
             toastr.success("success", "Photo has been uploaded");

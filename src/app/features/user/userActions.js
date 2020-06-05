@@ -1,6 +1,4 @@
 import { toastr } from "react-redux-toastr";
-import { getFirestore } from "redux-firestore";
-import { getFirebase } from "react-redux-firebase";
 import cuid from "cuid";
 import {
     asyncActionStart,
@@ -122,5 +120,58 @@ export const setMainPhoto = (photo) => async (
     } catch (e) {
         console.log(e);
         throw new Error("Error setting main photo");
+    }
+};
+
+export const goingToEvent = (event) => async (
+    dispatch,
+    getState,
+    { getFirebase, getFirestore }
+) => {
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const user = firebase.auth().currentUser;
+    const profile = getState().firebase.profile;
+    const attendee = {
+        host: false,
+        going: true,
+        jointDate: firestore.FieldValue.serverTimestamp(),
+        displayName: profile.displayName,
+        photoURL: profile.photoURL || "/assets/user.png",
+    };
+    try {
+        await firestore.update(`events/${event.id}`, {
+            [`attendees.${user.uid}`]: attendee,
+        });
+        await firestore.set(`event_attendees/${event.id}_${user.uid}`, {
+            eventId: event.id,
+            userUid: user.uid,
+            eventDate: event.date,
+            host: false,
+        });
+        toastr.success("success", "you've signed up for the Event");
+    } catch (e) {
+        console.log(e);
+        toastr.error("Oops!", "Not signed for event, Please try again");
+    }
+};
+
+export const cancelGoingToEvent = (event) => async (
+    dispatch,
+    getState,
+    { getFirestore, getFirebase }
+) => {
+    const firebase = getFirebase();
+    const firestore = getFirestore();
+    const user = firebase.auth().currentUser;
+    try {
+        await firestore.update(`events/${event.id}`, {
+            [`attendees.${user.uid}`]: firestore.FieldValue.delete(),
+        });
+        await firestore.delete(`event_attendees/${event.id}_${user.uid}`);
+        toastr.success("Success", "you've removed yourself from this event");
+    } catch (e) {
+        console.log(e);
+        toastr.error("Sorry", "unable to cancel event, please try again");
     }
 };

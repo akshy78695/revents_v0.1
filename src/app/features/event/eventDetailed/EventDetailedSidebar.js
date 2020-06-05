@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const EventDetailedSidebar = ({ attendees, hostName }) => {
     return (
@@ -32,10 +33,15 @@ const EventDetailedSidebar = ({ attendees, hostName }) => {
                                 className="col-10"
                                 style={{ display: "block", margin: "auto" }}
                             >
-                                <span className="h6 font-weight-bold">
-                                    {attendee.name}
-                                </span>
-                                {hostName === attendee.name && (
+                                {/* <span className="h6 font-weight-bold">
+                                </span> */}
+                                <Link
+                                    to={`/profile/${attendee.id}`}
+                                    className="h6 font-weight-bold"
+                                >
+                                    {attendee.displayName}
+                                </Link>
+                                {hostName === attendee.displayName && (
                                     <span className="float-right badge badge-warning px-3 py-1">
                                         Host
                                     </span>

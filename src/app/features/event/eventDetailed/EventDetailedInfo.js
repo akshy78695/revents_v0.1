@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import EventDetailedMap from "./EventDetailedMap";
-import { parseISO, format } from "date-fns";
+import { format } from "date-fns";
+import { isEmpty } from "react-redux-firebase";
 
 // https://www.google.com/maps?q=19.120127999999998,72.8891392
 
 const EventDetailedInfo = ({ event }) => {
     const [isMapOpen, setToggleMap] = useState(false);
     let { description, date, venue, venueLatLng } = event;
-
+    let isMapAvailable = isEmpty(venueLatLng) ? true : false;
     return (
         <div>
             <div className="card my-4">
@@ -55,7 +56,7 @@ const EventDetailedInfo = ({ event }) => {
                         </svg>
                     </span>
                     <span className="h5 ml-3 align-middle">
-                        {date && format(parseISO(date), "EEEE do LLL yyyy")}
+                        {date && format(date.toDate(), "EEEE do LLL yyyy")}
                     </span>
                 </div>
                 <div className="card-body border-top p-0">
@@ -80,17 +81,64 @@ const EventDetailedInfo = ({ event }) => {
                         <button
                             className="btn btn-info btn-sm float-right align-middle"
                             onClick={() => setToggleMap(!isMapOpen)}
-                            disabled={true}
+                            // disabled={venueLatLng === {} ? true : false}
+                            disabled={isMapAvailable}
                         >
                             {isMapOpen ? (
-                                <span>Close Map</span>
+                                <span>
+                                    <span>
+                                        <svg
+                                            className="bi bi-x-square"
+                                            width="1em"
+                                            height="1em"
+                                            viewBox="0 0 16 16"
+                                            fill="currentColor"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+                                            />
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"
+                                            />
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"
+                                            />
+                                        </svg>
+                                    </span>{" "}
+                                    <span className="align-middle">
+                                        Close Map
+                                    </span>
+                                </span>
                             ) : (
-                                <span>Show Map</span>
+                                <span>
+                                    <span>
+                                        <svg
+                                            className="bi bi-geo-alt"
+                                            width="1em"
+                                            height="1em"
+                                            viewBox="0 0 16 16"
+                                            fill="currentColor"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+                                            />
+                                        </svg>
+                                    </span>{" "}
+                                    <span className="align-middle">
+                                        Show Map
+                                    </span>
+                                </span>
                             )}
                         </button>
                         <br />
                         <br />
-                        {venueLatLng === {} && (
+                        {isEmpty(venueLatLng) && (
                             <span className="float-right text-danger">
                                 Sorry! map not available
                             </span>
@@ -98,8 +146,8 @@ const EventDetailedInfo = ({ event }) => {
                     </div>
                     {isMapOpen && (
                         <EventDetailedMap
-                            lat={venueLatLng ? venueLatLng.lat : 19.295233}
-                            lng={venueLatLng ? venueLatLng.lng : 72.854393}
+                            lat={venueLatLng && venueLatLng.lat}
+                            lng={venueLatLng && venueLatLng.lng}
                         />
                     )}
                 </div>

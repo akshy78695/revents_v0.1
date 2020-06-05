@@ -1,5 +1,5 @@
 // FORMSY is react library like redux form
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
 import {
@@ -8,13 +8,14 @@ import {
     hasLengthGreaterThan,
     isRequired,
 } from "revalidate";
-import { createEvent, updateEvent } from "./eventActions";
-import cuid from "cuid";
+import { createEvent, updateEvent, cancelToggle } from "./eventActions";
 import InputText from "../../common/form/InputText";
 import InputTextarea from "../../common/form/InputTextarea";
 import SelectInput from "../../common/form/SelectInput";
 import InputDate from "../../common/form/InputDate";
 import PlaceInput from "../../common/form/PlaceInput";
+import { withFirestore } from "react-redux-firebase";
+import EventNotFound from "./eventDetailed/EventNotFound";
 
 /*  
     http://api.openweathermap.org/data/2.5/weather?zip=401105,in&appid=d610bde57032cdc064598ffec1ea9f27
@@ -29,17 +30,24 @@ import PlaceInput from "../../common/form/PlaceInput";
 const mapState = (state, ownProps) => {
     let eventId = ownProps.match.params.id;
 
-    let event = { title: "", date: "", city: "", venue: "", hostedBy: "" };
+    let event = {};
 
-    if (eventId && state.events.length > 0) {
-        event = state.events.filter((event) => event.id === eventId)[0];
+    if (
+        state.firestore.ordered.events &&
+        state.firestore.ordered.events.length > 0
+    ) {
+        event =
+            state.firestore.ordered.events.filter(
+                (event) => event.id === eventId
+            )[0] || {};
     }
-    return { initialValues: event };
+    return { initialValues: event, event };
 };
 
 const actions = {
     createEvent,
     updateEvent,
+    cancelToggle,
 };
 
 const category = [
@@ -68,16 +76,28 @@ export class EventForm extends Component {
         this.state = {
             cityLatLng: {},
             venueLatLng: {},
+            nullEvent: false,
         };
     }
 
+    async componentDidMount() {
+        const { firestore, match } = this.props;
+        await firestore.setListener(`events/${match.params.id}`);
+        // if (!event.exists) {
+        //     this.setState({ nullEvent: true });
+        // }
+        // if (event.exists) {
+        //     this.setState({ isEvent: true });
+        // }
+    }
+    async componentWillUnmount() {
+        const { firestore, match } = this.props;
+        await firestore.unsetListener(`events/${match.params.id}`);
+    }
     onSubmit = async (values) => {
-        // warning for moment :Deprecation warning: value provided is not in a recognized RFC2822 or ISO
-        //format. moment construction falls back to js Date(), which is not reliable across all browsers and
-        //versions.
-        // values.venueLatLng = this.state.venueLatLng;
         let onlyVenue = values.venue;
         onlyVenue = onlyVenue.substring(0, onlyVenue.indexOf(","));
+        // getting latitude and longnitude from api
         await fetch(
             `http://api.openweathermap.org/data/2.5/weather?q=${onlyVenue}&appid=d610bde57032cdc064598ffec1ea9f27`
         )
@@ -96,42 +116,20 @@ export class EventForm extends Component {
             .catch((e) => {
                 console.log(e);
                 console.log("error in getting lat and lng in creating event");
-                values.venueLatLng = undefined;
+                values.venueLatLng = {};
             });
-        let time = new Date(values.date);
-        values.date = time.toISOString();
-        if (this.props.initialValues.id) {
-            this.props.updateEvent(values);
-            this.props.history.push(`/event/${this.props.initialValues.id}`);
-        } else {
-            let newEvent = {
-                ...values,
-                id: cuid(),
-                hostPhotoURL:
-                    "https://randomuser.me/api/portraits/med/men/22.jpg",
-                attendees: [
-                    {
-                        id: "b",
-                        name: "Tom",
-                        photoURL:
-                            "https://randomuser.me/api/portraits/thumb/women/22.jpg",
-                    },
-                    {
-                        id: "a",
-                        name: "Bob",
-                        photoURL:
-                            "https://randomuser.me/api/portraits/thumb/women/20.jpg",
-                    },
-                    {
-                        id: "c",
-                        name: "joe",
-                        photoURL:
-                            "https://randomuser.me/api/portraits/thumb/women/60.jpg",
-                    },
-                ],
-            };
-            this.props.createEvent(newEvent);
-            this.props.history.push(`/event/${newEvent.id}`);
+        try {
+            if (this.props.initialValues.id) {
+                this.props.updateEvent(values);
+                this.props.history.push(
+                    `/event/${this.props.initialValues.id}`
+                );
+            } else {
+                let createdEvent = await this.props.createEvent(values);
+                this.props.history.push(`/event/${createdEvent.id}`);
+            }
+        } catch (e) {
+            console.log(e);
         }
     };
     render() {
@@ -141,90 +139,118 @@ export class EventForm extends Component {
             invalid,
             submitting,
             pristine,
+            event,
+            cancelToggle,
         } = this.props;
+        if (this.state.nullEvent) {
+            return <EventNotFound />;
+        }
         return (
-            <div className="col-md-12 mx-auto px-0 mb-4">
-                <div className="card">
-                    <div className="card-body">
-                        <div className="form-group">
-                            <label className="text-info">Event Details</label>
-                            <Field
-                                name="title"
-                                component={InputText}
-                                className="form-control mt-2"
-                                placeholder="TItle"
-                            />
-                            <Field
-                                name="category"
-                                component={SelectInput}
-                                options={category}
-                                multiple={false}
-                                className="custom-select mt-2"
-                                placeholder="Event About?"
-                            />
-                            <Field
-                                name="description"
-                                component={InputTextarea}
-                                className="form-control mt-2"
-                                placeholder="Little Description"
-                                rows={3}
-                            />
-                            <label className="mt-2 text-info">
-                                Event Location Details
-                            </label>
-                            <Field
-                                name="city"
-                                component={PlaceInput}
-                                className="form-control mt-2"
-                                placeholder="In Which CIty?"
-                            />
-                            <Field
-                                name="venue"
-                                component={PlaceInput}
-                                className="form-control mt-2"
-                                placeholder="Venue?"
-                            />
-                            <Field
-                                name="date"
-                                component={InputDate}
-                                dateFormat="dd LLL yyyy h:mm a"
-                                showTimeSelect
-                                timeFormat="HH:mm"
-                                className="form-control mt-2"
-                                placeholder="Date?"
-                            />
-                        </div>
-                        <div className="float-right">
-                            <button
-                                className="btn btn-primary"
-                                onClick={this.props.handleSubmit(this.onSubmit)}
-                                // onClick={}
-                                disabled={invalid || submitting || pristine}
-                            >
-                                Submit
-                            </button>
-                            <button
-                                className="btn btn-secondary ml-3"
-                                onClick={
-                                    initialValues.id
-                                        ? () =>
-                                              history.push(
-                                                  `/event/${initialValues.id}`
-                                              )
-                                        : () => history.push("/events")
-                                }
-                            >
-                                Cancel
-                            </button>
+            <Fragment>
+                {/* <div className="my-2">
+                </div> */}
+                <button
+                    className={`btn float-right my-2 ${
+                        event.cancelled ? "btn-success" : "btn-danger"
+                    }`}
+                    onClick={() => cancelToggle(!event.cancelled, event.id)}
+                >
+                    {event.cancelled ? "Reactivate Event" : "Cancel Event"}
+                    {/* Cancel Event */}
+                </button>
+                <div className="col-md-12 mx-auto px-0 mb-4 float-right">
+                    <div className="card">
+                        <div className="card-body">
+                            <div className="form-group">
+                                <label className="text-info">
+                                    Event Details
+                                </label>
+                                <Field
+                                    name="title"
+                                    component={InputText}
+                                    className="form-control mt-2"
+                                    placeholder="TItle"
+                                />
+                                <Field
+                                    name="category"
+                                    component={SelectInput}
+                                    options={category}
+                                    multiple={false}
+                                    className="custom-select mt-2"
+                                    placeholder="Event About?"
+                                />
+                                <Field
+                                    name="description"
+                                    component={InputTextarea}
+                                    className="form-control mt-2"
+                                    placeholder="Little Description"
+                                    rows={3}
+                                />
+                                <label className="mt-2 text-info">
+                                    Event Location Details
+                                </label>
+                                <Field
+                                    name="city"
+                                    component={PlaceInput}
+                                    className="form-control mt-2"
+                                    placeholder="In Which CIty?"
+                                />
+                                <Field
+                                    name="venue"
+                                    component={PlaceInput}
+                                    className="form-control mt-2"
+                                    placeholder="Venue?"
+                                />
+                                <Field
+                                    name="date"
+                                    component={InputDate}
+                                    dateFormat="dd LLL yyyy h:mm a"
+                                    showTimeSelect
+                                    timeFormat="HH:mm"
+                                    className="form-control mt-2"
+                                    placeholder="Date?"
+                                />
+                            </div>
+                            <div className="float-right">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={this.props.handleSubmit(
+                                        this.onSubmit
+                                    )}
+                                    // onClick={}
+                                    disabled={invalid || submitting || pristine}
+                                >
+                                    Submit
+                                </button>
+                                <button
+                                    className="btn btn-secondary ml-3"
+                                    onClick={
+                                        initialValues.id
+                                            ? () =>
+                                                  history.push(
+                                                      `/event/${initialValues.id}`
+                                                  )
+                                            : () => history.push("/events")
+                                    }
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </Fragment>
         );
     }
 }
 
-export default connect(
-    mapState,
-    actions
-)(reduxForm({ form: "eventForm", validate })(EventForm));
+export default withFirestore(
+    connect(
+        mapState,
+        actions
+    )(
+        reduxForm({ form: "eventForm", validate, enableReinitialize: true })(
+            EventForm
+        )
+    )
+);

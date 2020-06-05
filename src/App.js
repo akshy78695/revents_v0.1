@@ -10,6 +10,7 @@ import SettingsDashboard from "./app/features/user/Settings/SettingsDashboard";
 import TestComponent from "./app/features/test/TestComponent";
 import EventDetailedPage from "./app/features/event/eventDetailed/EventDetailedPage";
 import ModalManager from "./app/features/modals/ModalManager";
+import UserDetailed from "./app/features/user/Settings/userDetailed/UserDetailed";
 // import "./App.css";
 
 class App extends Component {
@@ -24,13 +25,15 @@ class App extends Component {
                     render={() => (
                         <div>
                             <Navbar />
-                            <Container
-                                className={`main`}
-                            >
+                            <Container className={`main`}>
                                 <Switch key={this.props.location.key}>
                                     <Route
                                         path="/peoples"
                                         component={PeoplesDashboard}
+                                    />
+                                    <Route
+                                        path="/profile/:id"
+                                        component={UserDetailed}
                                     />
                                     <Route
                                         path="/events"

@@ -6,7 +6,7 @@ import PlaceInput from "../../../common/form/PlaceInput";
 import TextInput from "../../../common/form/InputText";
 import InputRadio from "../../../common/form/InputRadio";
 
-import {addYears} from "date-fns"
+import {subYears} from "date-fns"
 class BasicPage extends Component {
     render() {
         const { pristine, submitting, updateProfile, handleSubmit } = this.props;
@@ -54,7 +54,7 @@ class BasicPage extends Component {
                         showYearDropdown={true}
                         showMonthDropdown={true}
                         dropdownMode="select"
-                        maxDate={addYears(new Date(), -18)}
+                        maxDate={subYears(new Date(), 18)}
                     />
                     <Field
                         name="city"

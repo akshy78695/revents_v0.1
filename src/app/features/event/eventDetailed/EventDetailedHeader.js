@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 // import drinks from "/assets/drinks.jpg"
 
-const EventDetailedHeader = ({ event }) => {
+const EventDetailedHeader = ({
+    event,
+    isHost,
+    isGoing,
+    goingToEvent,
+    cancelGoingToEvent,
+}) => {
     const [isImgLoad, imgState] = useState(false);
-    let { title, date, hostedBy, id } = event;
+    let { title, date, hostedBy, id, hostUid } = event;
     return (
         <div>
             <div
@@ -29,28 +35,49 @@ const EventDetailedHeader = ({ event }) => {
                     >
                         <p className="h2 font-weight-bold">{title} </p>
                         <p className="h5">
-                            {date && format(parseISO(date), "EEEE do LLL")}
+                            {date && format(date.toDate(), "EEEE do LLL")}
                         </p>
                         <p className="h5">
-                            Hosted by <strong>{hostedBy}</strong>
+                            Hosted by{" "}
+                            <strong>
+                                <Link to={`/profile/${hostUid}`} className="text-white">
+                                    {hostedBy}
+                                </Link>{" "}
+                            </strong>
                         </p>
                     </div>
                 )}
             </div>
             <div className="card" style={{ width: "100%" }}>
+                {/* {isHost && } */}
                 <div className="card-body py-2">
-                    <button className="btn btn-secondary btn-sm mx-2">
-                        Cancel my event
-                    </button>
-                    <button className="btn btn-primary btn-sm mx-2">
-                        Join this event
-                    </button>
-                    <Link
-                        to={`/manage/${id}`}
-                        className="btn btn-info btn-sm float-right"
-                    >
-                        Manage Event
-                    </Link>
+                    {!isHost && (
+                        <Fragment>
+                            {isGoing ? (
+                                <button
+                                    onClick={() => cancelGoingToEvent(event)}
+                                    className="btn btn-secondary btn-sm mx-2"
+                                >
+                                    Cancel my event
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => goingToEvent(event)}
+                                    className="btn btn-primary btn-sm mx-2"
+                                >
+                                    Join this event
+                                </button>
+                            )}
+                        </Fragment>
+                    )}
+                    {isHost && (
+                        <Link
+                            to={`/manage/${id}`}
+                            className="btn btn-info btn-sm float-right"
+                        >
+                            Manage Event
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@ import React from "react";
 import "../../../../App.css";
 import { NavLink } from "react-router-dom";
 
-const SignedInMenu = ({ onSignedOut, profile }) => {
+const SignedInMenu = ({ onSignedOut, profile, auth }) => {
     return (
         <div className="ml-auto mobileMargin nav-item dropdown">
             <a
@@ -32,21 +32,37 @@ const SignedInMenu = ({ onSignedOut, profile }) => {
                     <i className="fas fa-calendar-week"></i>
                     &emsp;My Events
                 </a>
-                <a className="dropdown-item" href="#!">
+                <a
+                    className="dropdown-item"
+                    href="#!"
+                    data-toggle="collapse"
+                    data-target=".navbar-collapse.show"
+                >
                     <i className="fas fa-users"></i>
                     &ensp;&nbsp;My Network
                 </a>
-                <a className="dropdown-item" href="#!">
+                {/* <a className="dropdown-item" href="#!">
                     <i className="fas fa-user"></i>
                     &emsp;My profile
-                </a>
-                <NavLink
-                    to="/settings"
-                    style={{ padding: ".25rem 1.5rem" }}
-                    className="dropdown-item text-dark"
-                >
-                    <i className="fas fa-cogs"></i>&ensp;&nbsp;Settings
-                </NavLink>
+                </a> */}
+                <div data-toggle="collapse" data-target=".navbar-collapse.show">
+                    <NavLink
+                        to={`/profile/${auth.uid}`}
+                        style={{ padding: ".25rem 1.5rem" }}
+                        className="dropdown-item text-dark"
+                    >
+                        <i className="fas fa-user"></i>&ensp;&nbsp;My profile
+                    </NavLink>
+                </div>
+                <div data-toggle="collapse" data-target=".navbar-collapse.show">
+                    <NavLink
+                        to="/settings"
+                        style={{ padding: ".25rem 1.5rem" }}
+                        className="dropdown-item text-dark"
+                    >
+                        <i className="fas fa-cogs"></i>&ensp;&nbsp;Settings
+                    </NavLink>
+                </div>
                 {/* <NavLink to="/settings">
                     <a class="dropdown-item text-dark">
                         <i className="fas fa-cogs"></i>&ensp;&nbsp;Settings
