@@ -1,12 +1,12 @@
 import React from "react";
 import "./loadingComponent.css";
 
-const LoadingComponent = ({ loaderWidth, loadingMessage }) => {
+const LoadingComponent = ({ loaderWidth, loadingMessage, loaderHeight }) => {
     return (
         // <Dimmer active={true}  inverted={true}>
         //     <Loader content="loading..."></Loader>
         // </Dimmer>
-        <div style={{ height: "85vh", margin: "0" }}>
+        <div style={{ height: `${loaderHeight || "85vh"}`, margin: "0" }}>
             <div
                 className="text-center align-middle"
                 style={{
@@ -15,7 +15,7 @@ const LoadingComponent = ({ loaderWidth, loadingMessage }) => {
                     top: "50%",
                     left: "50%",
                     transform: " translate(-50%,-50%)",
-                }} 
+                }}
             >
                 <img src="/assets/Rolling3.svg" alt="" width={loaderWidth} />
                 <div className="h6 text-info">{loadingMessage}</div>

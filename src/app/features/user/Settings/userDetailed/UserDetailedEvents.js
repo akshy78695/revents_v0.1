@@ -1,45 +1,292 @@
-import { Image, Card, Grid, Segment, Header, Menu } from "semantic-ui-react";
+// import { Image, Card, Grid, Segment, Header, Menu } from "semantic-ui-react";
 import React from "react";
+import "./css/eventsStyle.css";
+import format from "date-fns/format";
+import LoadingComponent from "../../../../layout/LoadingComponent";
+import { Link } from "react-router-dom";
 
-const UserDetailedEvents = () => {
+const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
+    const today = new Date(Date.now());
+
     return (
-        <Grid.Column width={12} className="mt-3">
-            <Segment attached>
-                <Header icon="calendar" content="Events" />
-                <Menu secondary pointing>
-                    <Menu.Item name="All Events" active />
-                    <Menu.Item name="Past Events" />
-                    <Menu.Item name="Future Events" />
-                    <Menu.Item name="Events Hosted" />
-                </Menu>
-
-                <Card.Group itemsPerRow={5}>
-                    <Card>
-                        <Image src="/assets/drinks.jpg" />
-                        <Card.Content>
-                            <Card.Header textAlign="center">
-                                Event Title
-                            </Card.Header>
-                            <Card.Meta textAlign="center">
-                                28th March 2018 at 10:00 PM
-                            </Card.Meta>
-                        </Card.Content>
-                    </Card>
-
-                    <Card>
-                        <Image src={"/assets/drinks.jpg"} />
-                        <Card.Content>
-                            <Card.Header textAlign="center">
-                                Event Title
-                            </Card.Header>
-                            <Card.Meta textAlign="center">
-                                28th March 2018 at 10:00 PM
-                            </Card.Meta>
-                        </Card.Content>
-                    </Card>
-                </Card.Group>
-            </Segment>
-        </Grid.Column>
+        <div className="row no-gutters mt-3 mb-4">
+            <div className="col-md-9">
+                <ul
+                    className="nav nav-tabs"
+                    id="myTab"
+                    role="tablist"
+                    onChange={(e, data) => {}}
+                >
+                    <li className="nav-item">
+                        <a
+                            className="nav-link active"
+                            id="all-tab"
+                            data-toggle="tab"
+                            href="#all"
+                            role="tab"
+                            aria-controls="home"
+                            aria-selected="true"
+                        >
+                            All Events
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            className="nav-link"
+                            id="past-tab"
+                            data-toggle="tab"
+                            href="#past"
+                            role="tab"
+                            aria-controls="profile"
+                            aria-selected="false"
+                        >
+                            Past Events
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            className="nav-link"
+                            id="future-tab"
+                            data-toggle="tab"
+                            href="#future"
+                            role="tab"
+                            aria-controls="contact"
+                            aria-selected="false"
+                        >
+                            Future Events
+                        </a>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            className="nav-link"
+                            id="hosted-tab"
+                            data-toggle="tab"
+                            href="#hosted"
+                            role="tab"
+                            aria-controls="contact"
+                            aria-selected="false"
+                        >
+                            Hosted Events
+                        </a>
+                    </li>
+                    <hr />
+                </ul>
+                <br />
+                <div className="tab-content" id="myTabContent">
+                    <div
+                        className="tab-pane fade show active"
+                        id="all"
+                        role="tabpanel"
+                        aria-labelledby="all-tab"
+                    >
+                        {eventsLoading ? (
+                            <LoadingComponent
+                                loadingMessage="Loading Events"
+                                loaderWidth="50px"
+                                loaderHeight="30vh"
+                            />
+                        ) : (
+                            events &&
+                            events.map((event) => (
+                                <Link
+                                    to={`/event/${event.id}`}
+                                    style={{
+                                        display: "inline-block",
+                                        width: "150px",
+                                    }}
+                                    className="event-card"
+                                    key={event.id}
+                                >
+                                    <div className="card">
+                                        <img
+                                            src={`/assets/categoryImages/${event.category}.jpg`}
+                                            className="card-img-top"
+                                            alt="..."
+                                        />
+                                        <div className="card-body">
+                                            <p className="card-text text-center font-weight-bold">
+                                                {event.title}
+                                            </p>
+                                            <div className="text-center">
+                                                {event.date &&
+                                                    format(
+                                                        event.date.toDate(),
+                                                        "dd LLL yyyy"
+                                                    )}
+                                            </div>
+                                            <div className="text-center">
+                                                {event.date &&
+                                                    format(
+                                                        event.date.toDate(),
+                                                        "h:mm a"
+                                                    )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))
+                        )}
+                    </div>
+                    <div
+                        className="tab-pane fade"
+                        id="past"
+                        role="tabpanel"
+                        aria-labelledby="past-tab"
+                    >
+                        {events &&
+                            events.map((event) => {
+                                if (new Date(event.date.toDate()) < today) {
+                                    return (
+                                        <Link
+                                            to={`/event/${event.id}`}
+                                            style={{
+                                                display: "inline-block",
+                                                width: "150px",
+                                            }}
+                                            className="event-card"
+                                            key={event.id}
+                                        >
+                                            <div className="card">
+                                                <img
+                                                    src={`/assets/categoryImages/${event.category}.jpg`}
+                                                    className="card-img-top"
+                                                    alt="..."
+                                                />
+                                                <div className="card-body">
+                                                    <p className="card-text text-center font-weight-bold">
+                                                        {event.title}
+                                                    </p>
+                                                    <div className="text-center">
+                                                        {event.date &&
+                                                            format(
+                                                                event.date.toDate(),
+                                                                "dd LLL yyyy"
+                                                            )}
+                                                    </div>
+                                                    <div className="text-center">
+                                                        {event.date &&
+                                                            format(
+                                                                event.date.toDate(),
+                                                                "h:mm a"
+                                                            )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })}
+                    </div>
+                    <div
+                        className="tab-pane fade"
+                        id="future"
+                        role="tabpanel"
+                        aria-labelledby="future-tab"
+                    >
+                        {events &&
+                            events.map((event) => {
+                                if (new Date(event.date.toDate()) > today) {
+                                    return (
+                                        <Link
+                                            to={`/event/${event.id}`}
+                                            style={{
+                                                display: "inline-block",
+                                                width: "150px",
+                                            }}
+                                            className="event-card"
+                                            key={event.id}
+                                        >
+                                            <div className="card">
+                                                <img
+                                                    src={`/assets/categoryImages/${event.category}.jpg`}
+                                                    className="card-img-top"
+                                                    alt="..."
+                                                />
+                                                <div className="card-body">
+                                                    <p className="card-text text-center font-weight-bold">
+                                                        {event.title}
+                                                    </p>
+                                                    <div className="text-center">
+                                                        {event.date &&
+                                                            format(
+                                                                event.date.toDate(),
+                                                                "dd LLL yyyy"
+                                                            )}
+                                                    </div>
+                                                    <div className="text-center">
+                                                        {event.date &&
+                                                            format(
+                                                                event.date.toDate(),
+                                                                "h:mm a"
+                                                            )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })}
+                    </div>
+                    <div
+                        className="tab-pane fade"
+                        id="hosted"
+                        role="tabpanel"
+                        aria-labelledby="hosted-tab"
+                    >
+                        {events &&
+                            events.map((event) => {
+                                if (event.hostUid === profile.id) {
+                                    return (
+                                        <Link
+                                            to={`/event/${event.id}`}
+                                            style={{
+                                                display: "inline-block",
+                                                width: "150px",
+                                            }}
+                                            className="event-card"
+                                            key={event.id}
+                                        >
+                                            <div className="card">
+                                                <img
+                                                    src={`/assets/categoryImages/${event.category}.jpg`}
+                                                    className="card-img-top"
+                                                    alt="..."
+                                                />
+                                                <div className="card-body">
+                                                    <p className="card-text text-center font-weight-bold">
+                                                        {event.title}
+                                                    </p>
+                                                    <div className="text-center">
+                                                        {event.date &&
+                                                            format(
+                                                                event.date.toDate(),
+                                                                "dd LLL yyyy"
+                                                            )}
+                                                    </div>
+                                                    <div className="text-center">
+                                                        {event.date &&
+                                                            format(
+                                                                event.date.toDate(),
+                                                                "h:mm a"
+                                                            )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })}
+                    </div>
+                </div>
+            </div>
+            <div className="col-md-3"></div>
+        </div>
     );
 };
 
