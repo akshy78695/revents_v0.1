@@ -90,8 +90,8 @@ export const getEventsForDashboard = (lastEvent) => async (
                   .orderBy("date")
                   .startAfter(startAfter)
                   .limit(2))
-                  : (query = eventRef
-                    .where("date", ">=", today)
+            : (query = eventRef
+                  .where("date", ">=", today)
                   .orderBy("date")
                   .limit(2));
         let events = [];
@@ -116,5 +116,29 @@ export const getEventsForDashboard = (lastEvent) => async (
     } catch (e) {
         console.log(e);
         dispatch(asyncActionError());
+    }
+};
+
+export const addEventComment = (eventId, values, parentId) => async (
+    dispatch,
+    getState,
+    { getFirebase }
+) => {
+    const firebase = getFirebase();
+    const profile = getState().firebase.profile;
+    const user = firebase.auth().currentUser;
+    const newComment = {
+        parentId: parentId,
+        displayName: profile.displayName,
+        photoURL: profile.photoURL || "/assets/user.png",
+        uid: user.uid,
+        text: values.comment,
+        date: Date.now(),
+    };
+    try {
+        await firebase.push(`/event_chat/${eventId}`, newComment);
+    } catch (e) {
+        console.log(e);
+        toastr.error("error adding comment", "please try again");
     }
 };

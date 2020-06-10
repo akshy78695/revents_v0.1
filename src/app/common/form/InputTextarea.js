@@ -11,7 +11,7 @@ const InputTextarea = ({
     return (
         <>
             <textarea
-                {...input}
+                {...input} 
                 placeholder={placeholder}
                 type={type}
                 className={className}
