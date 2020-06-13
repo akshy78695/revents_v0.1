@@ -4,12 +4,20 @@ import { connect } from "react-redux";
 import { getEventsForDashboard } from "./eventActions";
 import { withGetScreen } from "react-getscreen";
 import LoadingComponent from "../../layout/LoadingComponent";
-import RecentActivity from "./eventActivity/RecentActivity";
 import { firestoreConnect, isEmpty } from "react-redux-firebase";
+import EventActivity from "./eventActivity/EventActivity";
 
+const query = [
+    {
+        collection: "activity",
+        orderBy: ["timestamp", "desc"],
+        limit: 5,
+    },
+];
 const mapState = (state) => ({
     events: state.events,
     loading: state.async.loading,
+    activities: state.firestore.ordered.activity,
 });
 
 const actions = {
@@ -63,7 +71,7 @@ class EventDashboard extends Component {
         }
     };
     render() {
-        let { loading } = this.props;
+        let { loading, activities } = this.props;
         let { loadedEvents, moreEvents } = this.state;
         // if (!isLoaded(events)) return <LoadingComponent />;
         return (
@@ -79,12 +87,14 @@ class EventDashboard extends Component {
                                 loaderWidth={"60px"}
                             />
                         ) : (
-                            <EventList
-                                events={loadedEvents}
-                                moreEvents={moreEvents}
-                                getNextEvents={this.getNextEvents}
-                                loading={loading}
-                            />
+                            <div>
+                                <EventList
+                                    events={loadedEvents}
+                                    moreEvents={moreEvents}
+                                    getNextEvents={this.getNextEvents}
+                                    loading={loading}
+                                />
+                            </div>
                         )}
                         <div className="row mb-4">
                             <div className="col"></div>
@@ -101,32 +111,13 @@ class EventDashboard extends Component {
                                         </span>
                                     </Fragment>
                                 )}
-                                {/* <button
-                                    className="btn btn-primary"
-                                    style={{ width: "100%" }}
-                                    type="button"
-                                    onClick={this.getNextEvents}
-                                    disabled={!this.state.moreEvents}
-                                >
-                                    {loading ? (
-                                        <Fragment>
-                                            <span
-                                                className="spinner-border spinner-border-sm mr-2"
-                                                role="status"
-                                                aria-hidden="true"
-                                            ></span>
-                                            Loading...
-                                        </Fragment>
-                                    ) : (
-                                        <Fragment>More</Fragment>
-                                    )}
-                                </button> */}
                             </div>
                             <div className="col"></div>
                         </div>
                     </div>
-                    <div className="col-md-5 d-none d-md-block d-lg-block d-sm-none d-xs-none">
-                        <RecentActivity />
+                    {/* <div className="col-md-5 d-none d-md-block d-lg-block d-sm-none d-xs-none"> */}
+                    <div className="col-md-5">
+                        <EventActivity activities={activities} />
                     </div>
                 </div>
             </React.Fragment>
@@ -137,4 +128,4 @@ class EventDashboard extends Component {
 export default connect(
     mapState,
     actions
-)(firestoreConnect([{ collection: "events" }])(withGetScreen(EventDashboard)));
+)(firestoreConnect(query)(withGetScreen(EventDashboard)));

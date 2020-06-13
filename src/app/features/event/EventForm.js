@@ -147,17 +147,17 @@ export class EventForm extends Component {
         }
         return (
             <Fragment>
-                {/* <div className="my-2">
-                </div> */}
-                <button
-                    className={`btn float-right my-2 ${
-                        event.cancelled ? "btn-success" : "btn-danger"
-                    }`}
-                    onClick={() => cancelToggle(!event.cancelled, event.id)}
-                >
-                    {event.cancelled ? "Reactivate Event" : "Cancel Event"}
-                    {/* Cancel Event */}
-                </button>
+                {this.props.initialValues.id && (
+                    <button
+                        className={`btn float-right my-2 ${
+                            event.cancelled ? "btn-success" : "btn-danger"
+                        }`}
+                        onClick={() => cancelToggle(!event.cancelled, event.id)}
+                    >
+                        {event.cancelled ? "Reactivate Event" : "Cancel Event"}
+                        {/* Cancel Event */}
+                    </button>
+                )}
                 <div className="col-md-12 mx-auto px-0 mb-4 float-right">
                     <div className="card">
                         <div className="card-body">

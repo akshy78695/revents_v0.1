@@ -30,7 +30,7 @@ class Navbar extends Component {
         const { auth, profile } = this.props;
         const UserAuthenticated = auth.isLoaded && !auth.isEmpty;
         return (
-            <nav className=" navbar navbar-expand-md navbar-light bg-dark">
+            <nav className=" navbar navbar-expand-md navbar-light bg-dark sticky-top">
                 <div className="container">
                     <div className="navbar-brand">
                         <img
