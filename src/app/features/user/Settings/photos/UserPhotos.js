@@ -1,15 +1,19 @@
 import React, { Fragment } from "react";
 import { Card, Image } from "semantic-ui-react";
 
-const UserPhotos = ({ photos, profile, deletePhoto, setMainPhoto }) => {
+const UserPhotos = ({
+    photos,
+    profile,
+    deletePhoto,
+    setMainPhoto,
+    loading,
+}) => {
     let filteredPhotos;
     if (photos) {
         filteredPhotos = photos.filter(
             (photo) => photo.url !== profile.photoURL
         );
     }
-    console.log("filtered photos", filteredPhotos);
-    console.log("profile image", profile);
     return (
         <Fragment>
             <div className="h3 my-2">ALL PHOTOS</div>
@@ -103,7 +107,20 @@ const UserPhotos = ({ photos, profile, deletePhoto, setMainPhoto }) => {
                                                     setMainPhoto(photo)
                                                 }
                                             >
-                                                main
+                                                {!loading ? (
+                                                    <span>main</span>
+                                                ) : (
+                                                    <Fragment>
+                                                        <span
+                                                            className="spinner-border spinner-border-sm"
+                                                            role="status"
+                                                            aria-hidden="true"
+                                                        ></span>
+                                                        <span className="sr-only">
+                                                            Loading...
+                                                        </span>
+                                                    </Fragment>
+                                                )}
                                             </button>
                                             <button
                                                 type="button"

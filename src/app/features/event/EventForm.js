@@ -41,7 +41,7 @@ const mapState = (state, ownProps) => {
                 (event) => event.id === eventId
             )[0] || {};
     }
-    return { initialValues: event, event };
+    return { initialValues: event, event, loading: state.async.loading };
 };
 
 const actions = {
@@ -96,7 +96,10 @@ export class EventForm extends Component {
     }
     onSubmit = async (values) => {
         let onlyVenue = values.venue;
-        onlyVenue = onlyVenue.substring(0, onlyVenue.indexOf(","));
+        onlyVenue =
+            onlyVenue.indexOf(",") !== -1
+                ? onlyVenue.substring(0, onlyVenue.indexOf(","))
+                : onlyVenue;
         // getting latitude and longnitude from api
         await fetch(
             `http://api.openweathermap.org/data/2.5/weather?q=${onlyVenue}&appid=d610bde57032cdc064598ffec1ea9f27`
@@ -120,7 +123,7 @@ export class EventForm extends Component {
             });
         try {
             if (this.props.initialValues.id) {
-                this.props.updateEvent(values);
+                await this.props.updateEvent(values);
                 this.props.history.push(
                     `/event/${this.props.initialValues.id}`
                 );
@@ -141,6 +144,7 @@ export class EventForm extends Component {
             pristine,
             event,
             cancelToggle,
+            loading,
         } = this.props;
         if (this.state.nullEvent) {
             return <EventNotFound />;
@@ -217,13 +221,26 @@ export class EventForm extends Component {
                                     onClick={this.props.handleSubmit(
                                         this.onSubmit
                                     )}
-                                    // onClick={}
                                     disabled={invalid || submitting || pristine}
                                 >
-                                    Submit
+                                    {!loading ? (
+                                        <span>Submit</span>
+                                    ) : (
+                                        <Fragment>
+                                            <span
+                                                className="spinner-border spinner-border-sm mx-3"
+                                                role="status"
+                                                aria-hidden="true"
+                                            ></span>
+                                            <span className="sr-only">
+                                                Loading...
+                                            </span>
+                                        </Fragment>
+                                    )}
                                 </button>
                                 <button
                                     className="btn btn-secondary ml-3"
+                                    disabled={loading}
                                     onClick={
                                         initialValues.id
                                             ? () =>

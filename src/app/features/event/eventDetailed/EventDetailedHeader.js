@@ -9,6 +9,7 @@ const EventDetailedHeader = ({
     isGoing,
     goingToEvent,
     cancelGoingToEvent,
+    loading,
 }) => {
     const [isImgLoad, imgState] = useState(false);
     let { title, date, hostedBy, id, hostUid } = event;
@@ -40,7 +41,10 @@ const EventDetailedHeader = ({
                         <p className="h5">
                             Hosted by{" "}
                             <strong>
-                                <Link to={`/profile/${hostUid}`} className="text-white">
+                                <Link
+                                    to={`/profile/${hostUid}`}
+                                    className="text-white"
+                                >
                                     {hostedBy}
                                 </Link>{" "}
                             </strong>
@@ -65,7 +69,18 @@ const EventDetailedHeader = ({
                                     onClick={() => goingToEvent(event)}
                                     className="btn btn-primary btn-sm mx-2"
                                 >
-                                    Join this event
+                                    {!loading ? (
+                                        <span>Join this event</span>
+                                    ) : (
+                                        <Fragment>
+                                            <span
+                                                className="spinner-border spinner-border-sm ml-2 mr-1"
+                                                role="status"
+                                                aria-hidden="true"
+                                            ></span>
+                                            Loading...
+                                        </Fragment>
+                                    )}
                                 </button>
                             )}
                         </Fragment>

@@ -14,7 +14,6 @@ import { toastr } from "react-redux-toastr";
 import UserPhotos from "./UserPhotos";
 
 const query = ({ auth }) => {
-    console.log("auth in qurey function", auth);
     if (auth.uid) {
         return [
             {
@@ -48,7 +47,7 @@ const PhotosPage = ({
     uploadProfileImage,
     deletePhoto,
     setMainPhoto,
-    loading
+    loading,
 }) => {
     const [files, setFiles] = useState([]);
     const [image, setImage] = useState(null);
@@ -174,7 +173,12 @@ const PhotosPage = ({
                                             </svg>
                                         </span>
                                     </Button>
-                                    <Button disabled={loading} onClick={handleCancelCrop} inverted color="red">
+                                    <Button
+                                        disabled={loading}
+                                        onClick={handleCancelCrop}
+                                        inverted
+                                        color="red"
+                                    >
                                         <span>
                                             <svg
                                                 className="bi bi-x"
@@ -207,6 +211,7 @@ const PhotosPage = ({
                 profile={profile}
                 deletePhoto={handleDeletePhoto}
                 setMainPhoto={handleSetPhoto}
+                loading={loading}
             />
         </div>
     );
