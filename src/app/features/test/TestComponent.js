@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { incrementAsync, decrementAsync } from "./TestActions";
 import TestPlaceInput from "./TestPlaceInput";
 import { openModal } from "../modals/ModalActions";
-import { Button } from "semantic-ui-react";
+import { Button, Header } from "semantic-ui-react";
+import { toastr } from "react-redux-toastr";
+import firebase from "../../config/firebase";
 
 const mapState = (state) => ({
     data: state.test.data,
@@ -16,6 +18,80 @@ const actions = {
     openModal,
 };
 export class TestComponent extends Component {
+    handleTestUpdateProfile = async () => {
+        const firestore = firebase.firestore();
+        // doc = diana's userUid
+        let userDocRef = await firestore
+            .collection("users")
+            .doc("nSkb9so2SEPew47GXuXw9T2m95D2");
+        try {
+            await userDocRef.update({ displayName: "testing" });
+            toastr.success("Success");
+        } catch (error) {
+            console.log(error);
+            toastr.error("Computer says no");
+        }
+    };
+
+    handleCreateTestEvent = async () => {
+        const firestore = firebase.firestore();
+        let eventDocRef = await firestore.collection("events").doc("DELETEME");
+        try {
+            await eventDocRef.set({
+                title: "DELETEME",
+            });
+            toastr.success("Success");
+        } catch (error) {
+            console.log(error);
+            toastr.error("Computer says no");
+        }
+    };
+
+    handleTestJoinEvent = async () => {
+        const firestore = firebase.firestore();
+        let eventDocRef = await firestore.collection("events").doc("DELETEME");
+        const attendee = {
+            photoURL: "/assets/user.png",
+            displayName: "Testing",
+        };
+        try {
+            await eventDocRef.update({
+                [`attendees.nSkb9so2SEPew47GXuXw9T2m95D2`]: attendee,
+            });
+            toastr.success("Success");
+        } catch (error) {
+            console.log(error);
+            toastr.error("Computer says no");
+        }
+    };
+
+    handleTestCancelGoingToEvent = async () => {
+        const firestore = firebase.firestore();
+        let eventDocRef = await firestore.collection("events").doc("DELETEME");
+        try {
+            await eventDocRef.update({
+                [`attendees.nSkb9so2SEPew47GXuXw9T2m95D2`]: firebase.firestore.FieldValue.delete(),
+            });
+            toastr.success("Success");
+        } catch (error) {
+            console.log(error);
+            toastr.error("Computer says no");
+        }
+    };
+
+    handleTestChangeAttendeePhotoInEvent = async () => {
+        const firestore = firebase.firestore();
+        let eventDocRef = await firestore.collection("events").doc("DELETEME");
+        try {
+            await eventDocRef.update({
+                [`attendees.nSkb9so2SEPew47GXuXw9T2m95D2.photoURL`]: "testing123.jpg",
+            });
+            toastr.success("Success");
+        } catch (error) {
+            console.log(error);
+            toastr.error("Computer says no");
+        }
+    };
     render() {
         const {
             data,
@@ -65,6 +141,41 @@ export class TestComponent extends Component {
                         aria-hidden="true"
                     ></span>
                 </button>
+                <br />
+                <br />
+                <br />
+                <br />
+                <Header as="h2" content="Permissions tests" />
+                <Button
+                    onClick={this.handleCreateTestEvent}
+                    color="blue"
+                    fluid
+                    content="Test create event - should fail if anon"
+                />
+                <Button
+                    onClick={this.handleTestUpdateProfile}
+                    color="orange"
+                    fluid
+                    content="Test update dianas profile - should fail if anon/not diana - should succeed if diana"
+                />
+                <Button
+                    onClick={this.handleTestJoinEvent}
+                    color="olive"
+                    fluid
+                    content="Test joining an event - should fail if anon/not diana - should succeed if diana"
+                />
+                <Button
+                    onClick={this.handleTestCancelGoingToEvent}
+                    color="purple"
+                    fluid
+                    content="Test cancelling attendance to an event - should fail if anon/not diana - should succeed if diana"
+                />
+                <Button
+                    onClick={this.handleTestChangeAttendeePhotoInEvent}
+                    color="violet"
+                    fluid
+                    content="Test changing photo for event attendee - should fail if anon/not diana - should succeed if diana"
+                />
                 <br />
                 <br />
                 <br />

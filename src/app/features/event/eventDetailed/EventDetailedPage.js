@@ -12,6 +12,7 @@ import LoadingComponent from "../../../layout/LoadingComponent";
 import { withFirestore, isEmpty, firebaseConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import { addEventComment } from "../eventActions";
+import { openModal } from "../../modals/ModalActions";
 
 const mapState = (state, ownProps) => {
     let eventId = ownProps.match.params.id;
@@ -42,6 +43,7 @@ const actions = {
     goingToEvent,
     cancelGoingToEvent,
     addEventComment,
+    openModal,
 };
 class EventDetailedPage extends Component {
     constructor(props) {
@@ -63,6 +65,7 @@ class EventDetailedPage extends Component {
     }
     render() {
         const {
+            openModal,
             event,
             isMobile,
             auth,
@@ -78,6 +81,7 @@ class EventDetailedPage extends Component {
         const isHost = event.hostUid === auth.uid;
         const isGoing = attendees && attendees.some((a) => a.id === auth.uid);
         const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
+        const authenticated = auth.isLoaded && !auth.isEmpty;
         if (this.state.nullEvent) {
             return <EventNotFound />;
         }
@@ -101,13 +105,17 @@ class EventDetailedPage extends Component {
                                 goingToEvent={goingToEvent}
                                 cancelGoingToEvent={cancelGoingToEvent}
                                 loading={loading}
+                                openModal={openModal}
+                                authenticated={authenticated}
                             />
                             <EventDetailedInfo event={event} />
-                            <EventDetailedChat
-                                eventChat={chatTree}
-                                addEventComment={addEventComment}
-                                eventId={event.id}
-                            />
+                            {authenticated && (
+                                <EventDetailedChat
+                                    eventChat={chatTree}
+                                    addEventComment={addEventComment}
+                                    eventId={event.id}
+                                />
+                            )}
                         </div>
                         <div className="col-md-4">
                             <EventDetailedSidebar

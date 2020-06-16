@@ -55,8 +55,8 @@ export class EventListItem extends Component {
                 <hr style={{ margin: "0" }} />
                 <div className="card-body">
                     <i className="far fa-clock"></i>{" "}
-                    {format(date.toDate(), "EEEE do LLL")} at{" "}
-                    {format(date.toDate(), "h:mm a")} |
+                    {format(date && date.toDate(), "EEEE do LLL")} at{" "}
+                    {format(date && date.toDate(), "h:mm a")} |
                     <i className="fas fa-map-marker-alt"></i> {venue}
                 </div>
                 <hr style={{ margin: "0" }} />

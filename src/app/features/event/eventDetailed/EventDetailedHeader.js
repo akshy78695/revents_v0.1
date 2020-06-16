@@ -10,6 +10,8 @@ const EventDetailedHeader = ({
     goingToEvent,
     cancelGoingToEvent,
     loading,
+    openModal,
+    authenticated,
 }) => {
     const [isImgLoad, imgState] = useState(false);
     let { title, date, hostedBy, id, hostUid } = event;
@@ -52,19 +54,20 @@ const EventDetailedHeader = ({
                     </div>
                 )}
             </div>
+
             <div className="card" style={{ width: "100%" }}>
-                {/* {isHost && } */}
                 <div className="card-body py-2">
                     {!isHost && (
                         <Fragment>
-                            {isGoing ? (
+                            {isGoing && (
                                 <button
                                     onClick={() => cancelGoingToEvent(event)}
                                     className="btn btn-secondary btn-sm mx-2"
                                 >
                                     Cancel my event
                                 </button>
-                            ) : (
+                            )}
+                            {!isGoing && authenticated && (
                                 <button
                                     onClick={() => goingToEvent(event)}
                                     className="btn btn-primary btn-sm mx-2"
@@ -81,6 +84,14 @@ const EventDetailedHeader = ({
                                             Loading...
                                         </Fragment>
                                     )}
+                                </button>
+                            )}
+                            {!authenticated && (
+                                <button
+                                    onClick={() => openModal("UnauthModal")}
+                                    className="btn btn-primary btn-sm mx-2"
+                                >
+                                    <span>Join this event</span>
                                 </button>
                             )}
                         </Fragment>

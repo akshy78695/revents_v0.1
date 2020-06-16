@@ -11,6 +11,7 @@ import TestComponent from "./app/features/test/TestComponent";
 import EventDetailedPage from "./app/features/event/eventDetailed/EventDetailedPage";
 import ModalManager from "./app/features/modals/ModalManager";
 import UserDetailed from "./app/features/user/Settings/userDetailed/UserDetailed";
+import { UserIsAuthenticated } from "./app/features/auth/authWrapper";
 // import "./App.css";
 
 class App extends Component {
@@ -28,32 +29,40 @@ class App extends Component {
                             <Container className={`main`}>
                                 <Switch key={this.props.location.key}>
                                     <Route
-                                        path="/peoples"
-                                        component={PeoplesDashboard}
-                                    />
-                                    <Route
-                                        path="/profile/:id"
-                                        component={UserDetailed}
-                                    />
-                                    <Route
-                                        path="/events"
-                                        component={EventDashboard}
-                                    />
-                                    <Route
-                                        path={["/create", "/manage/:id"]}
-                                        component={EventForm}
-                                    />
-                                    <Route
-                                        path="/settings"
-                                        component={SettingsDashboard}
+                                        path="/event/:id"
+                                        component={EventDetailedPage}
                                     />
                                     <Route
                                         path="/test"
                                         component={TestComponent}
                                     />
                                     <Route
-                                        path="/event/:id"
-                                        component={EventDetailedPage}
+                                        path="/events"
+                                        component={EventDashboard}
+                                    />
+                                    <Route
+                                        path="/peoples"
+                                        component={UserIsAuthenticated(
+                                            PeoplesDashboard
+                                        )}
+                                    />
+                                    <Route
+                                        path="/profile/:id"
+                                        component={UserIsAuthenticated(
+                                            UserDetailed
+                                        )}
+                                    />
+                                    <Route
+                                        path={["/create", "/manage/:id"]}
+                                        component={UserIsAuthenticated(
+                                            EventForm
+                                        )}
+                                    />
+                                    <Route
+                                        path="/settings"
+                                        component={UserIsAuthenticated(
+                                            SettingsDashboard
+                                        )}
                                     />
                                 </Switch>
                             </Container>

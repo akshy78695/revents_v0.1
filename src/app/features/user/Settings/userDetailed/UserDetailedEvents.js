@@ -110,14 +110,16 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                                             <div className="text-center">
                                                 {event.date &&
                                                     format(
-                                                        event.date.toDate(),
+                                                        event.date &&
+                                                            event.date.toDate(),
                                                         "dd LLL yyyy"
                                                     )}
                                             </div>
                                             <div className="text-center">
                                                 {event.date &&
                                                     format(
-                                                        event.date.toDate(),
+                                                        event.date &&
+                                                            event.date.toDate(),
                                                         "h:mm a"
                                                     )}
                                             </div>
@@ -135,7 +137,11 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                     >
                         {events &&
                             events.map((event) => {
-                                if (new Date(event.date.toDate()) < today) {
+                                if (
+                                    new Date(
+                                        event.date && event.date.toDate()
+                                    ) < today
+                                ) {
                                     return (
                                         <Link
                                             to={`/event/${event.id}`}
@@ -157,18 +163,18 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                                                         {event.title}
                                                     </p>
                                                     <div className="text-center">
-                                                        {event.date &&
-                                                            format(
+                                                        {format(
+                                                            event.date &&
                                                                 event.date.toDate(),
-                                                                "dd LLL yyyy"
-                                                            )}
+                                                            "dd LLL yyyy"
+                                                        )}
                                                     </div>
                                                     <div className="text-center">
-                                                        {event.date &&
-                                                            format(
+                                                        {format(
+                                                            event.date &&
                                                                 event.date.toDate(),
-                                                                "h:mm a"
-                                                            )}
+                                                            "h:mm a"
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -187,7 +193,11 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                     >
                         {events &&
                             events.map((event) => {
-                                if (new Date(event.date.toDate()) > today) {
+                                if (
+                                    new Date(
+                                        event.date && event.date.toDate()
+                                    ) > today
+                                ) {
                                     return (
                                         <Link
                                             to={`/event/${event.id}`}
@@ -209,18 +219,18 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                                                         {event.title}
                                                     </p>
                                                     <div className="text-center">
-                                                        {event.date &&
-                                                            format(
+                                                        {format(
+                                                            event.date &&
                                                                 event.date.toDate(),
-                                                                "dd LLL yyyy"
-                                                            )}
+                                                            "dd LLL yyyy"
+                                                        )}
                                                     </div>
                                                     <div className="text-center">
-                                                        {event.date &&
-                                                            format(
+                                                        {format(
+                                                            event.date &&
                                                                 event.date.toDate(),
-                                                                "h:mm a"
-                                                            )}
+                                                            "h:mm a"
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -261,18 +271,18 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                                                         {event.title}
                                                     </p>
                                                     <div className="text-center">
-                                                        {event.date &&
-                                                            format(
+                                                        {format(
+                                                            event.date &&
                                                                 event.date.toDate(),
-                                                                "dd LLL yyyy"
-                                                            )}
+                                                            "dd LLL yyyy"
+                                                        )}
                                                     </div>
                                                     <div className="text-center">
-                                                        {event.date &&
-                                                            format(
+                                                        {format(
+                                                            event.date &&
                                                                 event.date.toDate(),
-                                                                "h:mm a"
-                                                            )}
+                                                            "h:mm a"
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
