@@ -8,7 +8,7 @@ import { closeModal, openModal } from "./ModalActions";
 const actions = { closeModal, openModal };
 
 class UnauthModal extends Component {
-    handleCloseModal = () => { 
+    handleCloseModal = () => {
         if (this.props.location.pathname.includes("/event")) {
             this.props.closeModal();
         } else {
@@ -24,8 +24,10 @@ class UnauthModal extends Component {
                 open={true}
                 onClose={this.handleCloseModal}
                 style={{ top: "auto", left: "auto", height: "auto" }}
+                dimmer="blurring"
+                closeIcon={true}
             >
-                <Modal.Header>
+                <Modal.Header className="mr-2">
                     You need to be signed in to do that!
                 </Modal.Header>
                 <Modal.Content>

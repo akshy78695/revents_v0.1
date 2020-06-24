@@ -117,8 +117,6 @@ export class EventForm extends Component {
                 };
             })
             .catch((e) => {
-                console.log(e);
-                console.log("error in getting lat and lng in creating event");
                 values.venueLatLng = {};
             });
         try {

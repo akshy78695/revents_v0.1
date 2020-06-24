@@ -8,6 +8,7 @@ import Account from "./Account";
 import { connect } from "react-redux";
 import { updatePassword } from "../../auth/authActions";
 import { updateProfile } from "../../user/userActions";
+import { withGetScreen } from "react-getscreen";
 const actions = {
     updatePassword,
     updateProfile,
@@ -25,14 +26,15 @@ const SettingsDashboard = ({
     providerId,
     user,
     updateProfile,
+    isMobile,
 }) => {
     return (
         <div>
             <div className="row">
-                <div className="col-md-4">
-                    <SettingNavbar />
+                <div className="col-sm-4">
+                    {!isMobile() && <SettingNavbar />}
                 </div>
-                <div className="col-md-8">
+                <div className="col-sm-8">
                     <Switch>
                         <Redirect
                             exact
@@ -74,4 +76,4 @@ const SettingsDashboard = ({
     );
 };
 
-export default connect(mapState, actions)(SettingsDashboard);
+export default connect(mapState, actions)(withGetScreen(SettingsDashboard));

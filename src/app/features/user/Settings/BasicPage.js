@@ -1,15 +1,27 @@
 import React, { Component } from "react";
-import { Segment, Form, Header, Divider, Button, Label } from "semantic-ui-react";
+import {
+    Segment,
+    Form,
+    Header,
+    Divider,
+    Button,
+    Label,
+} from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import InputDate from "../../../common/form/InputDate";
 import PlaceInput from "../../../common/form/PlaceInput";
 import TextInput from "../../../common/form/InputText";
 import InputRadio from "../../../common/form/InputRadio";
 
-import {subYears} from "date-fns"
+import { subYears } from "date-fns";
 class BasicPage extends Component {
     render() {
-        const { pristine, submitting, updateProfile, handleSubmit } = this.props;
+        const {
+            pristine,
+            submitting,
+            updateProfile,
+            handleSubmit,
+        } = this.props;
         return (
             <Segment>
                 <Header dividing size="large" content="Basics" />
@@ -23,26 +35,19 @@ class BasicPage extends Component {
                     />
                     <Form.Group inline className="mt-2">
                         <Label className="mr-2">Gender: </Label>
-                        <Field 
-                        name="gender"
-                        type="radio"
-                        value="male"
-                        label="male"
-                        component={InputRadio}
+                        <Field
+                            name="gender"
+                            type="radio"
+                            value="male"
+                            label="male"
+                            component={InputRadio}
                         />
-                        <Field 
-                        name="gender"
-                        type="radio"
-                        value="female"
-                        label="female"
-                        component={InputRadio}
-                        />
-                        <Field 
-                        name="gender"
-                        type="radio"
-                        value="tik toker"
-                        label="tik toker"
-                        component={InputRadio}
+                        <Field
+                            name="gender"
+                            type="radio"
+                            value="female"
+                            label="female"
+                            component={InputRadio}
                         />
                     </Form.Group>
                     <Field
@@ -78,4 +83,8 @@ class BasicPage extends Component {
     }
 }
 
-export default reduxForm({ form: "userProfile", enableReinitialize:true , destroyOnUnmount: false})(BasicPage);
+export default reduxForm({
+    form: "userProfile",
+    enableReinitialize: true,
+    destroyOnUnmount: false,
+})(BasicPage);

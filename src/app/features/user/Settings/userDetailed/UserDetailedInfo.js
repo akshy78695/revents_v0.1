@@ -1,16 +1,21 @@
 import React from "react";
 import { format } from "date-fns/esm";
+import { withRouter } from "react-router-dom";
+import { withGetScreen } from "react-getscreen";
 
-const UserDetailedInfo = ({ profile, currentUser }) => {
+const UserDetailedInfo = ({ profile, currentUser, history, isMobile }) => {
     let city;
     if (profile.city) {
-        city = profile.city.toString().substring(0, profile.city.indexOf(","));
-    } else {
-        city = "";
+        city =
+            profile.city.indexOf(",") !== -1
+                ? profile.city
+                      .toString()
+                      .substring(0, profile.city.indexOf(","))
+                : profile.city;
     }
     let time;
     if (profile.createdAt) {
-        let createdAt = new Date(profile.createdAt.seconds);
+        let createdAt = new Date(profile.createdAt.seconds * 1000);
         time = format(createdAt, "d LLL yyyy");
     } else {
         time = "";
@@ -75,22 +80,29 @@ const UserDetailedInfo = ({ profile, currentUser }) => {
                 </div>
             </div>
             <div className="col-md-3 pl-3">
-                <div className="bg-white">
-                    <div className="p-3">
-                        {currentUser ? (
-                            <div className="btn btn-outline-info btn-block disabled">
-                                Edit Profile
-                            </div>
-                        ) : (
-                            <div className="btn btn-outline-info btn-block disabled">
-                                Follow User
-                            </div>
-                        )}
+                {!isMobile() && (
+                    <div className="bg-white">
+                        <div className="p-3">
+                            {currentUser ? (
+                                <div
+                                    onClick={() =>
+                                        history.push("/settings/basic_settings")
+                                    }
+                                    className="btn btn-outline-info btn-block disabled"
+                                >
+                                    Edit Profile
+                                </div>
+                            ) : (
+                                <div className="btn btn-outline-info btn-block disabled">
+                                    Follow User
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );
 };
 
-export default UserDetailedInfo;
+export default withRouter(withGetScreen(UserDetailedInfo));

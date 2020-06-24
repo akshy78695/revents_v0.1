@@ -15,7 +15,7 @@ class LoginModal extends Component {
                 dimmer={"blurring"}
                 onClose={this.props.closeModal}
                 style={{ height: "auto", top: "auto", left: "auto" }}
-                closeIcon
+                closeIcon={true}
             >
                 <Modal.Header>Login to Re-vents</Modal.Header>
                 <Modal.Content>

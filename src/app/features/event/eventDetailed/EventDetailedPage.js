@@ -29,6 +29,7 @@ const mapState = (state, ownProps) => {
     }
     return {
         event,
+        requesting: state.firestore.status.requesting,
         auth: state.firebase.auth,
         eventChat:
             !isEmpty(state.firebase.data.event_chat) &&
@@ -50,7 +51,6 @@ class EventDetailedPage extends Component {
         super(props);
 
         this.state = {
-            nullEvent: false,
             isEvent: true,
         };
     }
@@ -74,24 +74,31 @@ class EventDetailedPage extends Component {
             addEventComment,
             eventChat,
             loading,
+            requesting,
+            match,
         } = this.props;
         const attendees =
-            event && event.attendees && objectToArray(event.attendees);
-
+            event &&
+            event.attendees &&
+            objectToArray(event.attendees).sort((a, b) => {
+                return a.joinDate.toDate() - b.joinDate.toDate();
+            });
+        // console.log(event);
         const isHost = event.hostUid === auth.uid;
         const isGoing = attendees && attendees.some((a) => a.id === auth.uid);
         const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
         const authenticated = auth.isLoaded && !auth.isEmpty;
-        if (this.state.nullEvent) {
-            return <EventNotFound />;
-        }
-        if (isEmpty(event)) {
+        const loadingEvent = requesting[`events/${match.params.id}`];
+        if (loadingEvent) {
             return (
                 <LoadingComponent
                     loaderWidth={"80px"}
                     loadingMessage={"Loading event.."}
                 />
             );
+        }
+        if (Object.keys(event).length === 0) {
+            return <EventNotFound />;
         }
         return (
             <div>
@@ -109,6 +116,12 @@ class EventDetailedPage extends Component {
                                 authenticated={authenticated}
                             />
                             <EventDetailedInfo event={event} />
+                            {isMobile() && (
+                                <EventDetailedSidebar
+                                    attendees={attendees}
+                                    hostName={event.hostedBy}
+                                />
+                            )}
                             {authenticated && (
                                 <EventDetailedChat
                                     eventChat={chatTree}
@@ -118,10 +131,12 @@ class EventDetailedPage extends Component {
                             )}
                         </div>
                         <div className="col-md-4">
-                            <EventDetailedSidebar
-                                attendees={attendees}
-                                hostName={event.hostedBy}
-                            />
+                            {!isMobile() && (
+                                <EventDetailedSidebar
+                                    attendees={attendees}
+                                    hostName={event.hostedBy}
+                                />
+                            )}
                         </div>
                     </div>
                 ) : (

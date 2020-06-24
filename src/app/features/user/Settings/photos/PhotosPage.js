@@ -60,10 +60,7 @@ const PhotosPage = ({
 
     const handleUploadImage = async () => {
         try {
-            let temp = await uploadProfileImage(image, files[0].name);
-            console.log(temp);
-            // if(temp === "success"|| temp === "error"){setUploadButton(false)}
-            console.log("uske niche");
+            await uploadProfileImage(image, files[0].name);
             handleCancelCrop();
             toastr.success("success", "Photo has been uploaded");
         } catch (e) {
@@ -80,7 +77,7 @@ const PhotosPage = ({
     const handleDeletePhoto = async (photo) => {
         try {
             await deletePhoto(photo);
-            toastr.success("success", "photo has been deleted");
+            toastr.warning("photo has been deleted");
         } catch (e) {
             toastr.error("oops", e.message);
         }

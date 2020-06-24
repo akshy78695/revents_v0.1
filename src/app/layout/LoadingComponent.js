@@ -9,7 +9,7 @@ const LoadingComponent = ({ loaderWidth, loadingMessage, loaderHeight }) => {
         <div style={{ height: `${loaderHeight || "85vh"}`, margin: "0" }}>
             <div
                 className="text-center align-middle"
-                style={{
+                style={{ 
                     margin: "auto",
                     position: "absolute",
                     top: "50%",

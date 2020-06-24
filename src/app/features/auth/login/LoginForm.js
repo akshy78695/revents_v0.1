@@ -4,14 +4,14 @@ import { Field, reduxForm } from "redux-form";
 import InputText from "../../../common/form/InputText";
 import { connect } from "react-redux";
 import { login, socialLogin } from "../authActions";
-import SocialLogin from "../socialLogin/SocialLogin"
+import SocialLogin from "../socialLogin/SocialLogin";
 
 const actions = {
     login,
-    socialLogin
+    socialLogin,
 };
 
-const LoginForm = ({ login, handleSubmit, error, socialLogin }) => {
+const LoginForm = ({ login, handleSubmit, error, socialLogin, submitting }) => {
     return (
         <Form size="large" onSubmit={handleSubmit(login)}>
             <Segment>
@@ -39,10 +39,20 @@ const LoginForm = ({ login, handleSubmit, error, socialLogin }) => {
                         Login failed
                     </Label>
                 )}
-
-                <Button fluid size="large" color="purple" className="mt-2">
-                    Login
-                </Button>
+                <div
+                    data-toggle={"collapse"}
+                    data-target={".navbar-collapse.show"}
+                >
+                    <Button
+                        loading={submitting}
+                        fluid
+                        size="large"
+                        color="purple"
+                        className="mt-2"
+                    >
+                        Login
+                    </Button>
+                </div>
                 <Divider horizontal>Or</Divider>
                 <SocialLogin socialLogin={socialLogin} />
             </Segment>

@@ -6,6 +6,7 @@ import SignedOutMenu from "./menu's/SignedOutMenu";
 import SignedInMenu from "./menu's/SignedInMenu";
 import { connect } from "react-redux";
 import { openModal } from "../modals/ModalActions";
+import { withGetScreen } from "react-getscreen";
 
 const actions = {
     openModal,
@@ -27,11 +28,12 @@ class Navbar extends Component {
         this.props.history.push("/");
     };
     render() {
-        const { auth, profile } = this.props;
+        const { auth, profile, isMobile } = this.props;
         const UserAuthenticated = auth.isLoaded && !auth.isEmpty;
+        const UserNotAuthenticated = auth.isLoaded && auth.isEmpty;
         return (
-            <nav className=" navbar navbar-expand-md navbar-light bg-dark sticky-top">
-                <div className="container">
+            <nav className=" navbar navbar-top navbar-expand-sm navbar-light bg-dark sticky-top justify-content-center">
+                <div className={`container`}>
                     <div className="navbar-brand">
                         <img
                             src="./assets/logo.png"
@@ -75,31 +77,7 @@ class Navbar extends Component {
                             {UserAuthenticated && (
                                 <Fragment>
                                     <li
-                                        className="nav-item"
-                                        data-toggle="collapse"
-                                        data-target=".navbar-collapse.show"
-                                    >
-                                        <NavLink
-                                            to="/peoples"
-                                            className="nav-link ml-3 text-white"
-                                        >
-                                            People
-                                        </NavLink>
-                                    </li>
-                                    <li
-                                        className="nav-item"
-                                        data-toggle="collapse"
-                                        data-target=".navbar-collapse.show"
-                                    >
-                                        <NavLink
-                                            to="/test"
-                                            className="nav-link ml-3 text-white"
-                                        >
-                                            test
-                                        </NavLink>
-                                    </li>
-                                    <li
-                                        className="nav-item createButtonMargin"
+                                        className="nav-item "
                                         data-toggle="collapse"
                                         data-target=".navbar-collapse.show"
                                     >
@@ -115,13 +93,14 @@ class Navbar extends Component {
                                 </Fragment>
                             )}
                         </ul>
-                        {UserAuthenticated ? (
+                        {!isMobile() && UserAuthenticated && (
                             <SignedInMenu
                                 auth={auth}
                                 profile={profile}
                                 onSignedOut={this.handleSignOut}
                             />
-                        ) : (
+                        )}
+                        {UserNotAuthenticated && (
                             <SignedOutMenu
                                 onSignedIn={this.handleSignIn}
                                 register={this.handleRegister}
@@ -134,4 +113,6 @@ class Navbar extends Component {
     }
 }
 
-export default withRouter(withFirebase(connect(mapState, actions)(Navbar)));
+export default withRouter(
+    withFirebase(connect(mapState, actions)(withGetScreen(Navbar)))
+);

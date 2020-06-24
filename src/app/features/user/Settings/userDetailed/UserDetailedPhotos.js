@@ -1,8 +1,9 @@
 import React from "react";
 import { Image } from "semantic-ui-react";
 import LazyLoad from "react-lazyload";
+import { withGetScreen } from "react-getscreen";
 
-const UserDetailedPhotos = ({ photos }) => {
+const UserDetailedPhotos = ({ photos, isMobile }) => {
     return (
         <div className="row no-gutters my-3">
             <div className="col-md-9 pr-3 bg-white">
@@ -14,18 +15,19 @@ const UserDetailedPhotos = ({ photos }) => {
                         </span>
                     </div>
                 </div>
-                <div className="row no-gutters px-3">
-                    {photos &&
-                        photos.map((photo, i) => (
-                            <div
-                                className="col-md-3 float-left py-3 px-1"
-                                style={{ width: "fit-content" }}
-                                key={i}
-                            >
+                <div
+                    className={`row no-gutters ${
+                        isMobile() ? "px-0" : "px-3"
+                    } `}
+                >
+                    <div className="py-3 px-1" style={{ width: "fit-content" }}>
+                        {photos &&
+                            photos.map((photo, i) => (
                                 <LazyLoad
+                                    key={i}
                                     height={150}
                                     placeholder={
-                                        <Image src="/assets/user.png" />
+                                        <Image src="/assets/blank.jpg" />
                                     }
                                 >
                                     <Image
@@ -33,13 +35,13 @@ const UserDetailedPhotos = ({ photos }) => {
                                         className="p-2"
                                         style={{
                                             margin: "auto",
-                                            width: "150px",
+                                            width: "140px",
                                             float: "left",
                                         }}
                                     />
                                 </LazyLoad>
-                            </div>
-                        ))}
+                            ))}
+                    </div>
                 </div>
             </div>
             <div className="col-md-3 pl-3"></div>
@@ -47,4 +49,4 @@ const UserDetailedPhotos = ({ photos }) => {
     );
 };
 
-export default UserDetailedPhotos;
+export default withGetScreen(UserDetailedPhotos);

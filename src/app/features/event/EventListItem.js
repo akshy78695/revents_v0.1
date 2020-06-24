@@ -5,6 +5,14 @@ import { objectToArray } from "../../common/util/helpers";
 import EventListAttendees from "./EventListAttendees";
 
 export class EventListItem extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            imgState: false,
+        };
+    }
+
     scrollTop = () => {
         window.scrollTo({
             top: 0,
@@ -27,36 +35,42 @@ export class EventListItem extends Component {
         } = this.props.event;
         return (
             <div className="card border shadow-lg rounded-lg mb-3">
-                <div className="card-body row">
-                    <div className="col-md-2 mr-3">
-                        <img
-                            style={{ width: "100px", borderRadius: "62px" }}
-                            src={hostPhotoURL || "/assets/user.png"}
-                            alt=""
-                        />
-                    </div>
-                    <div className="col-md-7">
-                        <div className="h3 pl-2">
+                <div className="media">
+                    <img
+                        style={{ width: "100px", borderRadius: "62px" }}
+                        src={
+                            this.state.imgState
+                                ? hostPhotoURL
+                                : "/assets/blank.jpg"
+                        }
+                        className="align-self-start m-3"
+                        alt=""
+                        onLoad={() => this.setState({ imgState: true })}
+                    />
+                    <div className="media-body align-self-center">
+                        <div className="my-0 h5">
                             <Link to={`event/${id}`}>{title}</Link>
                         </div>
-                        <div className="h6 pl-2">
+                        <div>
                             Hosted by{" "}
                             <Link to={`/profile/${hostUid}`}>{hostedBy}</Link>
                         </div>
-                        {cancelled && (
-                            <div>
-                                <span className=" h5 ml-2 text-center badge badge-danger py-1 px-3">
-                                    Event has been Cancelled
-                                </span>
-                            </div>
-                        )}
+                        <div>
+                            {cancelled && (
+                                <div>
+                                    <span className=" h5 ml-2 text-center badge badge-danger py-1 px-3">
+                                        Event has been Cancelled
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <hr style={{ margin: "0" }} />
                 <div className="card-body">
                     <i className="far fa-clock"></i>{" "}
-                    {format(date && date.toDate(), "EEEE do LLL")} at{" "}
-                    {format(date && date.toDate(), "h:mm a")} |
+                    {date && format(date && date.toDate(), "EEEE do LLL")} at{" "}
+                    {date && format(date && date.toDate(), "h:mm a")} |
                     <i className="fas fa-map-marker-alt"></i> {venue}
                 </div>
                 <hr style={{ margin: "0" }} />

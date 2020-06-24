@@ -1,11 +1,12 @@
 // import { Image, Card, Grid, Segment, Header, Menu } from "semantic-ui-react";
-import React from "react";
+import React, { Fragment } from "react";
 import "./css/eventsStyle.css";
 import format from "date-fns/format";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { Link } from "react-router-dom";
+import { withGetScreen } from "react-getscreen";
 
-const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
+const UserDetailedEvents = ({ events, eventsLoading, profile, isMobile }) => {
     const today = new Date(Date.now());
 
     return (
@@ -30,45 +31,97 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                             All Events
                         </a>
                     </li>
-                    <li className="nav-item">
-                        <a
-                            className="nav-link"
-                            id="past-tab"
-                            data-toggle="tab"
-                            href="#past"
-                            role="tab"
-                            aria-controls="profile"
-                            aria-selected="false"
-                        >
-                            Past Events
-                        </a>
-                    </li>
-                    <li className="nav-item">
-                        <a
-                            className="nav-link"
-                            id="future-tab"
-                            data-toggle="tab"
-                            href="#future"
-                            role="tab"
-                            aria-controls="contact"
-                            aria-selected="false"
-                        >
-                            Future Events
-                        </a>
-                    </li>
-                    <li className="nav-item">
-                        <a
-                            className="nav-link"
-                            id="hosted-tab"
-                            data-toggle="tab"
-                            href="#hosted"
-                            role="tab"
-                            aria-controls="contact"
-                            aria-selected="false"
-                        >
-                            Hosted Events
-                        </a>
-                    </li>
+                    {isMobile() ? (
+                        <li className="nav-item dropdown">
+                            <a
+                                className="nav-link dropdown-toggle"
+                                data-toggle="dropdown"
+                                href="!#"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                Sorted events
+                            </a>
+                            <div className="dropdown-menu">
+                                <a
+                                    className="nav-link"
+                                    id="past-tab"
+                                    data-toggle="tab"
+                                    href="#past"
+                                    role="tab"
+                                    aria-controls="profile"
+                                    aria-selected="false"
+                                >
+                                    Past Events
+                                </a>
+                                <a
+                                    className="nav-link"
+                                    id="future-tab"
+                                    data-toggle="tab"
+                                    href="#future"
+                                    role="tab"
+                                    aria-controls="contact"
+                                    aria-selected="false"
+                                >
+                                    Future Events
+                                </a>
+                                <a
+                                    className="nav-link"
+                                    id="hosted-tab"
+                                    data-toggle="tab"
+                                    href="#hosted"
+                                    role="tab"
+                                    aria-controls="contact"
+                                    aria-selected="false"
+                                >
+                                    Hosted Events
+                                </a>
+                            </div>
+                        </li>
+                    ) : (
+                        <Fragment>
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link"
+                                    id="past-tab"
+                                    data-toggle="tab"
+                                    href="#past"
+                                    role="tab"
+                                    aria-controls="profile"
+                                    aria-selected="false"
+                                >
+                                    Past Events
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link"
+                                    id="future-tab"
+                                    data-toggle="tab"
+                                    href="#future"
+                                    role="tab"
+                                    aria-controls="contact"
+                                    aria-selected="false"
+                                >
+                                    Future Events
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className="nav-link"
+                                    id="hosted-tab"
+                                    data-toggle="tab"
+                                    href="#hosted"
+                                    role="tab"
+                                    aria-controls="contact"
+                                    aria-selected="false"
+                                >
+                                    Hosted Events
+                                </a>
+                            </li>
+                        </Fragment>
+                    )}
                     <hr />
                 </ul>
                 <br />
@@ -296,8 +349,9 @@ const UserDetailedEvents = ({ events, eventsLoading, profile }) => {
                 </div>
             </div>
             <div className="col-md-3"></div>
+            <hr className="mb-5"/>
         </div>
     );
 };
 
-export default UserDetailedEvents;
+export default withGetScreen(UserDetailedEvents);

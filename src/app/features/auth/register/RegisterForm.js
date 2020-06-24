@@ -4,7 +4,7 @@ import { combineValidators, isRequired } from "revalidate";
 import { Form, Segment, Button, Label, Divider } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import InputText from "../../../common/form/InputText";
-import SocialLogin from "../socialLogin/SocialLogin"
+import SocialLogin from "../socialLogin/SocialLogin";
 import { registerUser } from "../authActions";
 
 const actions = {
@@ -53,17 +53,23 @@ const RegisterForm = ({
                             {error.message}
                         </Label>
                     )}
-                    <Button
-                        disabled={invalid || submitting}
-                        fluid
-                        size="large"
-                        className="mt-2"
-                        color="violet"
+                    <div
+                        data-toggle={"collapse"}
+                        data-target={".navbar-collapse.show"}
                     >
-                        Register
-                    </Button>
+                        <Button
+                            loading={submitting}
+                            disabled={invalid || submitting}
+                            fluid
+                            size="large"
+                            className="mt-2"
+                            color="violet"
+                        >
+                            Register
+                        </Button>
+                    </div>
                     <Divider horizontal>Or</Divider>
-                    <SocialLogin/>
+                    <SocialLogin />
                 </Segment>
             </Form>
         </div>

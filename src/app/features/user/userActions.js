@@ -8,14 +8,8 @@ import {
 import firebase from "../../config/firebase";
 import { FETCH_EVENT } from "../event/eventConstants";
 
-export const updateProfile = (user) => async (
-    dispatch,
-    getState,
-    { getFirebase }
-) => {
-    const firebase = getFirebase();
+export const updateProfile = (user) => async (dispatch, getState) => {
     const { isLoaded, isEmpty, ...updatedUser } = user;
-    console.log(user);
     try {
         await firebase.updateProfile(updatedUser);
         toastr.success("success", "profile has been updated");
@@ -26,11 +20,10 @@ export const updateProfile = (user) => async (
 export const uploadProfileImage = (file, fileName) => async (
     dispatch,
     getState,
-    { getFirestore, getFirebase }
+    { getFirestore }
 ) => {
     let imageName = cuid();
 
-    const firebase = getFirebase();
     const firestore = getFirestore();
     const user = firebase.auth().currentUser;
     console.log(user);
@@ -84,12 +77,10 @@ export const uploadProfileImage = (file, fileName) => async (
 export const deletePhoto = (photo) => async (
     dispatch,
     getState,
-    { getFirebase, getFirestore }
+    { getFirestore }
 ) => {
-    const firebase = getFirebase();
     const firestore = getFirestore();
     const user = firebase.auth().currentUser;
-
     try {
         await firebase.deleteFile(`${user.uid}/user_images/${photo.name}`);
         await firestore.delete({
@@ -109,7 +100,6 @@ export const setMainPhoto = (photo) => async (dispatch, getState) => {
     const today = new Date(Date.now());
     const userDocRef = firestore.collection("users").doc(user.uid);
     const eventAttendeeRef = firestore.collection("event_attendees");
-
     try {
         dispatch(asyncActionStart());
         let batch = firestore.batch();
@@ -122,17 +112,19 @@ export const setMainPhoto = (photo) => async (dispatch, getState) => {
             .where("eventDate", ">=", today);
 
         let eventQuerySnap = await eventQuery.get();
-
+        console.log(eventQuerySnap);
         for (let i = 0; i < eventQuerySnap.docs.length; i++) {
             let eventDocRef = firestore
                 .collection("events")
                 .doc(eventQuerySnap.docs[i].data().eventId);
             let event = await eventDocRef.get();
-            if (event.data().hostUid === user.uid) {
-                batch.update(eventDocRef, {
-                    hostPhotoURL: photo.url,
-                    [`attendees.${user.uid}.photoURL`]: photo.url,
-                });
+            if (event.data().hostUid) {
+                if (event.data().hostUid === user.uid) {
+                    batch.update(eventDocRef, {
+                        hostPhotoURL: photo.url,
+                        [`attendees.${user.uid}.photoURL`]: photo.url,
+                    });
+                }
             } else {
                 batch.update(eventDocRef, {
                     [`attendees.${user.uid}.photoURL`]: photo.url,
@@ -140,8 +132,12 @@ export const setMainPhoto = (photo) => async (dispatch, getState) => {
             }
         }
         console.log(batch);
-        await batch.commit();
         dispatch(asyncActionFinish());
+        await batch.commit();
+        toastr.success("success", "Profile updated", {
+            transitionIn: "bounceIn",
+            transitionOut: "bounceOut",
+        });
     } catch (e) {
         console.log(e);
         dispatch(asyncActionError());
@@ -157,7 +153,7 @@ export const goingToEvent = (event) => async (dispatch, getState) => {
     const attendee = {
         host: false,
         going: true,
-        jointDate: new Date(),
+        joinDate: new Date(),
         displayName: profile.displayName,
         photoURL: profile.photoURL || "/assets/user.png",
     };
@@ -191,9 +187,8 @@ export const goingToEvent = (event) => async (dispatch, getState) => {
 export const cancelGoingToEvent = (event) => async (
     dispatch,
     getState,
-    { getFirestore, getFirebase }
+    { getFirestore }
 ) => {
-    const firebase = getFirebase();
     const firestore = getFirestore();
     const user = firebase.auth().currentUser;
     try {

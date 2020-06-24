@@ -1,10 +1,10 @@
 import { SubmissionError, reset } from "redux-form";
 import { closeModal } from "../modals/ModalActions";
 import { toastr } from "react-redux-toastr";
+import firebase from "../../config/firebase"
 
 export const login = (creds) => {
-    return async (dispatch, getState, { getFirebase }) => {
-        const firebase = getFirebase();
+    return async (dispatch, getState, ) => {
         try {
             await firebase
                 .auth()
@@ -24,7 +24,6 @@ export const registerUser = (user) => async (
     getState,
     { getFirebase, getFirestore }
 ) => {
-    const firebase = getFirebase();
     const firestore = getFirestore();
     try {
         let createdUser = await firebase

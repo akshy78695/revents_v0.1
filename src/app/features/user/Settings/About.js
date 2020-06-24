@@ -21,7 +21,10 @@ const About = ({ pristine, submitting, handleSubmit, updateProfile }) => {
         <Segment>
             <Header dividing size="large" content="About Me" />
             <p>Complete your profile to get the most out of this site</p>
-            <Form onSubmit={handleSubmit(updateProfile)}>
+            <Form
+                onSubmit={handleSubmit(updateProfile)}
+                style={{ marginBottom: "45px" }}
+            >
                 <Form.Group inline>
                     <label>Tell us your status: </label>
                     <Field
@@ -87,6 +90,8 @@ const About = ({ pristine, submitting, handleSubmit, updateProfile }) => {
     );
 };
 
-export default reduxForm({ form: "userProfile", enableReinitialize: true, destroyOnUnmount:false })(
-    About
-);
+export default reduxForm({
+    form: "userProfile",
+    enableReinitialize: true,
+    destroyOnUnmount: false,
+})(About);

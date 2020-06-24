@@ -4,20 +4,12 @@ import { connect } from "react-redux";
 import { getEventsForDashboard } from "./eventActions";
 import { withGetScreen } from "react-getscreen";
 import LoadingComponent from "../../layout/LoadingComponent";
-import { firestoreConnect, isEmpty } from "react-redux-firebase";
+import { isEmpty } from "react-redux-firebase";
 import EventActivity from "./eventActivity/EventActivity";
 
-const query = [
-    {
-        collection: "activity",
-        orderBy: ["timestamp", "desc"],
-        limit: 5,
-    },
-];
 const mapState = (state) => ({
     events: state.events,
     loading: state.async.loading,
-    activities: state.firestore.ordered.activity,
 });
 
 const actions = {
@@ -28,6 +20,7 @@ class EventDashboard extends Component {
     constructor(props) {
         super(props);
         this._isMounted = false;
+
         this.state = {
             moreEvents: false,
             loadingInitial: true,
@@ -37,6 +30,7 @@ class EventDashboard extends Component {
 
     async componentDidMount() {
         this._isMounted = true;
+
         let next = await this.props.getEventsForDashboard();
 
         if (next && next.docs && next.docs.length > 1) {
@@ -71,14 +65,15 @@ class EventDashboard extends Component {
         }
     };
     render() {
-        let { loading, activities } = this.props;
+        let { loading, isMobile } = this.props;
         let { loadedEvents, moreEvents } = this.state;
         // if (!isLoaded(events)) return <LoadingComponent />;
+
         return (
             <React.Fragment>
                 <div className="row">
                     <div
-                        className={`col-md-7 ${this.props.isMobile() && "p-0"}`}
+                        className={`col-md-7 ${isMobile() && "p-0"}`}
                         // className={`col-md-7 }`}
                     >
                         {this.state.loadingInitial ? (
@@ -117,15 +112,13 @@ class EventDashboard extends Component {
                     </div>
                     {/* <div className="col-md-5 d-none d-md-block d-lg-block d-sm-none d-xs-none"> */}
                     <div className="col-md-5">
-                        <EventActivity activities={activities} />
+                        {!isMobile() && <EventActivity />}
                     </div>
                 </div>
+                <hr className="mb-4" />
             </React.Fragment>
         );
     }
 }
 
-export default connect(
-    mapState,
-    actions
-)(firestoreConnect(query)(withGetScreen(EventDashboard)));
+export default connect(mapState, actions)(withGetScreen(EventDashboard));

@@ -9,13 +9,13 @@ import {
 } from "../async/asyncActions";
 
 export const createEvent = (event) => {
-    return async (dispatch, getState, { getFirestore, getFirebase }) => {
+    return async (dispatch, getState, { getFirestore }) => {
         const firestore = getFirestore();
-        const firebase = getFirebase();
         const user = firebase.auth().currentUser;
         const photoURL = getState().firebase.profile.photoURL;
         const newEvent = createNewEvent(user, photoURL, event);
         try {
+            dispatch(asyncActionStart());
             let createdEvent = await firestore.add("events", newEvent);
             await firestore.set(
                 `event_attendees/${createdEvent.id}_${user.uid}`,
@@ -26,11 +26,12 @@ export const createEvent = (event) => {
                     host: true,
                 }
             );
-
             toastr.success("Success!", "Event Has Created");
+            dispatch(asyncActionFinish());
             return createdEvent;
         } catch (e) {
             console.log(e);
+            dispatch(asyncActionError());
             toastr.error(" something went wrong!", "Event Not created!");
         }
     };
@@ -153,9 +154,7 @@ export const getEventsForDashboard = (lastEvent) => async (
 export const addEventComment = (eventId, values, parentId) => async (
     dispatch,
     getState,
-    { getFirebase }
 ) => {
-    const firebase = getFirebase();
     const profile = getState().firebase.profile;
     const user = firebase.auth().currentUser;
     const newComment = {

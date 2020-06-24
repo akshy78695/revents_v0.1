@@ -12,11 +12,18 @@ import EventDetailedPage from "./app/features/event/eventDetailed/EventDetailedP
 import ModalManager from "./app/features/modals/ModalManager";
 import UserDetailed from "./app/features/user/Settings/userDetailed/UserDetailed";
 import { UserIsAuthenticated } from "./app/features/auth/authWrapper";
+import NotFound from "./app/layout/NotFound";
+import TabBar from "./app/features/tabbar/TabBar";
+import EventActivity from "./app/features/event/eventActivity/EventActivity";
+import { withGetScreen } from "react-getscreen";
+import MobileSettings from "./app/features/user/Settings/mobileSettings/MobileSettings";
+// import SettingNavbar from "./app/features/user/Settings/SettingNavbar";
 // import "./App.css";
 
 class App extends Component {
     // console.log(this.props)
     render() {
+        const { isMobile } = this.props;
         return (
             <React.Fragment>
                 <ModalManager />
@@ -26,7 +33,10 @@ class App extends Component {
                     render={() => (
                         <div>
                             <Navbar />
-                            <Container className={`main`}>
+                            {isMobile() && <TabBar />}
+                            <Container
+                                className={`main `}
+                            >
                                 <Switch key={this.props.location.key}>
                                     <Route
                                         path="/event/:id"
@@ -64,6 +74,17 @@ class App extends Component {
                                             SettingsDashboard
                                         )}
                                     />
+                                    <Route
+                                        path="/_settings"
+                                        component={UserIsAuthenticated(
+                                            MobileSettings
+                                        )}
+                                    />
+                                    <Route
+                                        path="/recent_activity"
+                                        component={EventActivity}
+                                    />
+                                    <Route component={NotFound} />
                                 </Switch>
                             </Container>
                         </div>
@@ -74,4 +95,4 @@ class App extends Component {
     }
 }
 
-export default withRouter(App);
+export default withRouter(withGetScreen(App));
