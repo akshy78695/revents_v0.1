@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+project deployed to firebase [https://revents-e190c.web.app/](https://revents-e190c.web.app/).
 
 ## Available Scripts
 
